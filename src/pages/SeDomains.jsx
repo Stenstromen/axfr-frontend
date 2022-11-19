@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
+import { Link } from "react-router-dom";
 import BeatLoader from "react-spinners/BeatLoader";
 import Table from "react-bootstrap/Table";
-import Button from 'react-bootstrap/Button';
+import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
+import Breadcrumb from "react-bootstrap/Breadcrumb";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import axios from "axios";
 
 const URL = process.env.REACT_APP_BACKEND_URL;
@@ -29,9 +33,9 @@ function SeDomains() {
 
   function scrollToTop() {
     window.scrollTo({
-        top: 0, 
-        behavior: 'auto'
-      });
+      top: 0,
+      behavior: "auto",
+    });
   }
 
   useBottomScrollListener(bottom);
@@ -49,35 +53,64 @@ function SeDomains() {
 
   return (
     <div>
-      <h1>the param is {param}</h1>
-      <h1>.SE</h1>
       <Container>
-        <Table striped bordered>
-          <thead>
-            <tr>
-              <th>Domain Name</th>
-            </tr>
-          </thead>
-          <tbody>
-            {domains.map((item) => {
-              return (
+        <Row className="justify-content-md-center">
+          <Col xl="8" sm>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <h2>
+                New .SE Domains for{" "}
+                {param.replace(/(\d{4})(\d{2})(\d{2})/g, "$1-$2-$3")}
+              </h2>
+            </div>
+            <Breadcrumb>
+              <Breadcrumb.Item>
+                <Link to={"/"}>Home</Link>
+              </Breadcrumb.Item>
+              <Breadcrumb.Item>
+                <Link to={"/se"}>SE</Link>
+              </Breadcrumb.Item>
+              <Breadcrumb.Item active>{param}</Breadcrumb.Item>
+            </Breadcrumb>
+            <Table striped bordered>
+              <thead>
                 <tr>
-                  <td key={item.domain}>{item.domain}</td>
+                  <th>Domain Name</th>
                 </tr>
-              );
-            })}
-          </tbody>
-        </Table>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          {loading ? <BeatLoader loading /> : ""}
-          {pagefull ? <Button variant="success" onClick={scrollToTop}>Back to top</Button> : ""}
-        </div>
+              </thead>
+              <tbody>
+                {domains.map((item) => {
+                  return (
+                    <tr>
+                      <td key={item.domain}>{item.domain}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </Table>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              {loading ? <BeatLoader loading /> : ""}
+              {pagefull ? (
+                <Button variant="success" onClick={scrollToTop}>
+                  Back to top
+                </Button>
+              ) : (
+                ""
+              )}
+            </div>
+          </Col>
+        </Row>
       </Container>
     </div>
   );

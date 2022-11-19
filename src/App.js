@@ -1,4 +1,5 @@
-import logo from './logo.svg';
+import { useEffect } from "react";
+import { useDefaultProvider } from "./contexts/default";
 import { Routes, Route } from "react-router-dom"
 import Home from "./pages/Home"
 import Se from "./pages/Se"
@@ -10,6 +11,16 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar from './components/NavBar';
 
 function App() {
+  const {isMobile, setIsMobile} = useDefaultProvider();
+
+  function handleResize() {
+    console.log(isMobile)
+    window.innerWidth < 425 ? setIsMobile(true) : setIsMobile(false);
+  }
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+  },[]);
   return (
     <div>
       <NavBar />
