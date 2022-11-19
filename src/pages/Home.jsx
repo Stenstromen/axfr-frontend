@@ -10,7 +10,7 @@ import Stack from "react-bootstrap/Stack";
 import { useDefaultProvider } from "../contexts/default";
 
 function Home() {
-  const { isMobile } = useDefaultProvider();
+  const { isMobile, darkmode } = useDefaultProvider();
   return (
     <div>
       <Container>
@@ -38,7 +38,7 @@ function Home() {
         direction="vertical"
         className="col-md-5 mx-auto"
       >
-        <Card style={{ width: "300px" }}>
+        <Card bg={darkmode ? "light" : "dark"} text={darkmode ? "dark" : "light"} style={{ width: "300px" }}>
           <Card.Body>
             <Card.Title>📝 Fresh .SE Domains</Card.Title>
             <Card.Text>
@@ -49,7 +49,7 @@ function Home() {
             </Link>
           </Card.Body>
         </Card>
-        <Card style={{ width: "300px" }}>
+        <Card bg={darkmode ? "light" : "dark"} text={darkmode ? "dark" : "light"} style={{ width: "300px" }}>
           <Card.Body>
             <Card.Title>📝 Fresh .NU Domains</Card.Title>
             <Card.Text>
@@ -68,7 +68,7 @@ function Home() {
           direction="horizontal"
           className="col-md-5 mx-auto"
         >
-          <Card style={{ width: "32rem", height: "200px" }}>
+          <Card bg={darkmode ? "light" : "dark"} text={darkmode ? "dark" : "light"} style={{ width: "32rem", height: "200px" }}>
             <Card.Body>
               <Card.Title>📝 Fresh .SE Domains</Card.Title>
               <Card.Text>
@@ -79,7 +79,7 @@ function Home() {
               </Link>
             </Card.Body>
           </Card>
-          <Card style={{ width: "32rem", height: "200px" }}>
+          <Card bg={darkmode ? "light" : "dark"} text={darkmode ? "dark" : "light"} style={{ width: "32rem", height: "200px" }}>
             <Card.Body>
               <Card.Title>📝 Fresh .NU Domains</Card.Title>
               <Card.Text>

@@ -11,6 +11,7 @@ import { MdOutlineDns } from "react-icons/md";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
+import { useDefaultProvider } from "../contexts/default";
 
 const URL = process.env.REACT_APP_BACKEND_URL;
 const CONFIG = {
@@ -24,6 +25,7 @@ function Nu() {
   const [dates, setDates] = useState([]);
   const [loading, setLoading] = useState(false);
   const [pagefull, setPagefull] = useState(false);
+  const { darkmode } = useDefaultProvider();
 
   function bottom() {
     if (pagefull) return;
@@ -71,7 +73,7 @@ function Nu() {
               </Breadcrumb.Item>
               <Breadcrumb.Item active>NU</Breadcrumb.Item>
             </Breadcrumb>
-            <Table striped bordered>
+            <Table striped bordered variant={darkmode ? "light" : "dark"}>
               <thead>
                 <tr>
                   <th>Domain Name</th>
