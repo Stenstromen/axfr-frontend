@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { useDefaultProvider } from "../contexts/default";
 import { Container, Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
+import { MdOutlineLightMode, MdOutlineDarkMode } from "react-icons/md";
 
 function NavBar() {
   const [sticky, setSticky] = useState(false);
-  const {isMobile} = useDefaultProvider();
+  const { isMobile, darkmode, setDarkmode } = useDefaultProvider();
 
   function stickNavbar() {
     if (window !== undefined) {
@@ -24,8 +25,8 @@ function NavBar() {
       {isMobile ? (
         <Navbar
           expand="sm"
-          bg="primary"
-          variant="light"
+          bg={darkmode ? "primary" : "dark"}
+          variant={darkmode ? "light" : "dark"}
           fixed={sticky ? "top" : ""}
         >
           <Container>
@@ -51,10 +52,23 @@ function NavBar() {
                 </Nav.Link>
               </NavDropdown>
             </Nav>
+            <Nav>
+              <Nav.Link onClick={() => setDarkmode(!darkmode)}>
+                {darkmode ? (
+                  <MdOutlineDarkMode size={25} />
+                ) : (
+                  <MdOutlineLightMode size={25} />
+                )}
+              </Nav.Link>
+            </Nav>
           </Container>
         </Navbar>
       ) : (
-        <Navbar bg="primary" variant="light" fixed={sticky ? "top" : ""}>
+        <Navbar
+          bg={darkmode ? "primary" : "dark"}
+          variant={darkmode ? "light" : "dark"}
+          fixed={sticky ? "top" : ""}
+        >
           <Container>
             <LinkContainer to="/">
               <Navbar.Brand>AXFR.se</Navbar.Brand>
@@ -66,6 +80,15 @@ function NavBar() {
               <LinkContainer to="/nu">
                 <Nav.Link>.NU</Nav.Link>
               </LinkContainer>
+            </Nav>
+            <Nav>
+              <Nav.Link onClick={() => setDarkmode(!darkmode)}>
+                {darkmode ? (
+                  <MdOutlineDarkMode size={25} />
+                ) : (
+                  <MdOutlineLightMode size={25} />
+                )}
+              </Nav.Link>
             </Nav>
           </Container>
         </Navbar>

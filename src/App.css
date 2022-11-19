@@ -1,3 +1,10 @@
+:root {    
+  --bodyColor: "#000000";
+}
+body {    
+  background-color: var(--bodyColor);
+}
+
 .App {
   text-align: center;
 }

@@ -10,6 +10,7 @@ import Breadcrumb from "react-bootstrap/Breadcrumb";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import axios from "axios";
+import { useDefaultProvider } from "../contexts/default";
 
 const URL = process.env.REACT_APP_BACKEND_URL;
 const CONFIG = {
@@ -24,6 +25,7 @@ function NuDomains() {
   const [loading, setLoading] = useState(false);
   const [pagefull, setPagefull] = useState(false);
   const [domains, setDomains] = useState([]);
+  const { darkmode } = useDefaultProvider();
 
   function bottom() {
     if (pagefull) return;
@@ -77,7 +79,7 @@ function NuDomains() {
               </Breadcrumb.Item>
               <Breadcrumb.Item active>{param}</Breadcrumb.Item>
             </Breadcrumb>
-            <Table striped bordered>
+            <Table striped bordered variant={darkmode ? "light" : "dark"}>
               <thead>
                 <tr>
                   <th>Domain Name</th>
