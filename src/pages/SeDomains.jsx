@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { Link } from "react-router-dom";
 import BeatLoader from "react-spinners/BeatLoader";
 import Table from "react-bootstrap/Table";
@@ -39,8 +38,6 @@ function SeDomains() {
       behavior: "auto",
     });
   }
-
-  useBottomScrollListener(bottom);
 
   useEffect(() => {
     axios.get(URL + `/se/${param}/${page}`, CONFIG).then((response) => {
@@ -100,6 +97,7 @@ function SeDomains() {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
+                flexDirection: "column"
               }}
             >
               {loading ? <BeatLoader loading /> : ""}
@@ -108,7 +106,7 @@ function SeDomains() {
                   Back to top
                 </Button>
               ) : (
-                ""
+                <Button onClick={() => bottom()} variant="primary" size="sm">Next Page</Button>
               )}
             </div>
           </Col>
