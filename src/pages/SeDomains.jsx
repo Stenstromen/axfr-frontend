@@ -65,7 +65,7 @@ function SeDomains() {
                 alignItems: "center",
               }}
             >
-              <h2>
+              <h2 style={{color: darkmode ? "black" : "white" }}>
                 New .SE Domains for{" "}
                 {param.replace(/(\d{4})(\d{2})(\d{2})/g, "$1-$2-$3")}
               </h2>

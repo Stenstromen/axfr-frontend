@@ -23,7 +23,7 @@ function Home() {
                 alignItems: "center",
               }}
             >
-              <h2>New .SE/.NU Domains</h2>
+              <h2 style={{color: darkmode ? "black" : "white" }}>New .SE/.NU Domains</h2>
             </div>
             <Breadcrumb>
               <Breadcrumb.Item active>Home</Breadcrumb.Item>
