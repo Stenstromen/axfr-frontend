@@ -51,7 +51,7 @@ function SeDomains() {
       }
       setDomains(domains.concat(response.data));
     });
-  }, [page]);
+  }, [loading]);
 
   return (
     <div>
