@@ -1,6 +1,5 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import BeatLoader from "react-spinners/BeatLoader";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -40,7 +39,6 @@ function Nu() {
     });
   }
 
-  useBottomScrollListener(bottom);
 
   useEffect(() => {
     axios.get(URL + `/nu/${page}`, CONFIG).then((response) => {
@@ -102,6 +100,7 @@ function Nu() {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
+                flexDirection: "column"
               }}
             >
               {loading ? <BeatLoader loading /> : ""}
@@ -110,7 +109,7 @@ function Nu() {
                   Back to top
                 </Button>
               ) : (
-                ""
+                <Button onClick={() => bottom()} variant="primary" size="sm">Next Page</Button>
               )}
             </div>
           </Col>
