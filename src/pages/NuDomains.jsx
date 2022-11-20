@@ -20,7 +20,7 @@ const CONFIG = {
 
 function NuDomains() {
   const { param } = useParams();
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [pagefull, setPagefull] = useState(false);
   const [domains, setDomains] = useState([]);
