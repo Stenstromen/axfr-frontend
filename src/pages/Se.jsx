@@ -64,7 +64,7 @@ function Se() {
                 justifyContent: "center",
                 alignItems: "center",
               }}
-            ><h2>New .SE Domains</h2></div>
+            ><h2 style={{color: darkmode ? "black" : "white" }}>New .SE Domains</h2></div>
             <Breadcrumb>
               <Breadcrumb.Item>
                 <Link to={"/"}>Home</Link>

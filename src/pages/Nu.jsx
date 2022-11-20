@@ -65,7 +65,7 @@ function Nu() {
                 alignItems: "center",
               }}
             >
-              <h2>New .NU Domains</h2>
+              <h2 style={{color: darkmode ? "black" : "white" }}>New .NU Domains</h2>
             </div>
             <Breadcrumb>
               <Breadcrumb.Item>
