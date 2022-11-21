@@ -20,7 +20,7 @@ const CONFIG = {
 
 function SeDomains() {
   const { param } = useParams();
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const [pagefull, setPagefull] = useState(false);
   const [domains, setDomains] = useState([]);
