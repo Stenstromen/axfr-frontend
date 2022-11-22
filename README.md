@@ -3,8 +3,9 @@
 
 ## Todo
 * ~~Add "Home" content~~
-* ~~Add infinite scroll~~
+* Add infinite scroll
 * ~~Add sticky NavBar~~
 * ~~Add responsive NavBar~~
 * ~~Add react-bootstrap breadcrumbs~~
-* Add light/dark mode
+* ~~Add light/dark mode~~~
+* Add domain search option with WhoIs link

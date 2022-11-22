@@ -1,13 +1,14 @@
+import React from "react";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
 import BeatLoader from "react-spinners/BeatLoader";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Breadcrumb from "react-bootstrap/Breadcrumb";
+import Col from "react-bootstrap/Col";
+import { Link } from "react-router-dom";
+import { MdOutlineDns } from "react-icons/md";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";
-import Breadcrumb from "react-bootstrap/Breadcrumb";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import axios from "axios";
 import { useDefaultProvider } from "../contexts/default";
 
@@ -18,12 +19,11 @@ const CONFIG = {
   },
 };
 
-function NuDomains() {
-  const { param } = useParams();
+function Dates(props) {
   const [page, setPage] = useState(0);
+  const [dates, setDates] = useState([]);
   const [loading, setLoading] = useState(false);
   const [pagefull, setPagefull] = useState(false);
-  const [domains, setDomains] = useState([]);
   const { darkmode } = useDefaultProvider();
 
   function bottom() {
@@ -39,14 +39,15 @@ function NuDomains() {
     });
   }
 
+
   useEffect(() => {
-    axios.get(URL + `/nu/${param}/${page}`, CONFIG).then((response) => {
+    axios.get(URL + `/${props.tld}/${page}`, CONFIG).then((response) => {
       setLoading(false);
       if (response.data.length === 0) {
         setPagefull(true);
         return;
       }
-      setDomains(domains.concat(response.data));
+      setDates(dates.concat(response.data));
     });
   }, [page]);
 
@@ -62,31 +63,33 @@ function NuDomains() {
                 alignItems: "center",
               }}
             >
-              <h2 style={{color: darkmode ? "black" : "white" }}>
-                New .NU Domains for{" "}
-                {param.replace(/(\d{4})(\d{2})(\d{2})/g, "$1-$2-$3")}
-              </h2>
+              <h2 style={{color: darkmode ? "black" : "white" }}>New .{props.tld.toUpperCase()} Domains</h2>
             </div>
             <Breadcrumb>
               <Breadcrumb.Item>
                 <Link to={"/"}>Home</Link>
               </Breadcrumb.Item>
-              <Breadcrumb.Item>
-                <Link to={"/nu"}>NU</Link>
-              </Breadcrumb.Item>
-              <Breadcrumb.Item active>{param}</Breadcrumb.Item>
+              <Breadcrumb.Item active>{props.tld.toUpperCase()}</Breadcrumb.Item>
             </Breadcrumb>
             <Table striped bordered variant={darkmode ? "light" : "dark"}>
               <thead>
                 <tr>
                   <th>Domain Name</th>
+                  <th>Domain Amount</th>
+                  <th>View</th>
                 </tr>
               </thead>
               <tbody>
-                {domains.map((item) => {
+                {dates.map((item) => {
                   return (
-                    <tr>
-                      <td key={item.domain}>{item.domain}</td>
+                    <tr key={item.date}>
+                      <td>{item.date}</td>
+                      <td>{item.amount}</td>
+                      <td>
+                        <Link to={`/${props.tld}/${item.date}`}>
+                          <MdOutlineDns size={30} />
+                        </Link>
+                      </td>
                     </tr>
                   );
                 })}
@@ -116,4 +119,4 @@ function NuDomains() {
   );
 }
 
-export default NuDomains;
+export default Dates;

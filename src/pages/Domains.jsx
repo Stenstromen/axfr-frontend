@@ -18,7 +18,7 @@ const CONFIG = {
   },
 };
 
-function SeDomains() {
+function Domains(props) {
   const { param } = useParams();
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -40,7 +40,7 @@ function SeDomains() {
   }
 
   useEffect(() => {
-    axios.get(URL + `/se/${param}/${page}`, CONFIG).then((response) => {
+    axios.get(URL + `/${props.tld}/${param}/${page}`, CONFIG).then((response) => {
       setLoading(false);
       if (response.data.length === 0) {
         setPagefull(true);
@@ -63,7 +63,7 @@ function SeDomains() {
               }}
             >
               <h2 style={{color: darkmode ? "black" : "white" }}>
-                New .SE Domains for{" "}
+                .{props.tld.toUpperCase()} Domains for{" "}
                 {param.replace(/(\d{4})(\d{2})(\d{2})/g, "$1-$2-$3")}
               </h2>
             </div>
@@ -72,7 +72,7 @@ function SeDomains() {
                 <Link to={"/"}>Home</Link>
               </Breadcrumb.Item>
               <Breadcrumb.Item>
-                <Link to={"/se"}>SE</Link>
+                <Link to={`/${props.tld}`}>{props.tld.toUpperCase()}</Link>
               </Breadcrumb.Item>
               <Breadcrumb.Item active>{param}</Breadcrumb.Item>
             </Breadcrumb>
@@ -116,4 +116,4 @@ function SeDomains() {
   );
 }
 
-export default SeDomains;
+export default Domains;

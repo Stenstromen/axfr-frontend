@@ -2,10 +2,8 @@ import { useEffect } from "react";
 import { useDefaultProvider } from "./contexts/default";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import Se from "./pages/Se";
-import SeDomains from "./pages/SeDomains";
-import NuDomains from "./pages/NuDomains";
-import Nu from "./pages/Nu";
+import Dates from "./pages/Dates";
+import Domains from "./pages/Domains";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import NavBar from "./components/NavBar";
@@ -41,10 +39,10 @@ function App() {
       <NavBar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/se" element={<Se />} />
-        <Route path="/se/:param" element={<SeDomains />} />
-        <Route path="/nu" element={<Nu />} />
-        <Route path="/nu/:param" element={<NuDomains />} />
+        <Route path="/se" element={<Dates tld="se" />} />
+        <Route path="/nu" element={<Dates tld="nu" />} />
+        <Route path="/se/:param" element={<Domains tld="se" />} />
+        <Route path="/nu/:param" element={<Domains tld="nu" />} />
       </Routes>
     </div>
   );
