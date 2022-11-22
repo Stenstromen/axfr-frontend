@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import BeatLoader from "react-spinners/BeatLoader";
+import { AiOutlineArrowUp, AiOutlineArrowDown } from "react-icons/ai";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Spinner from "react-bootstrap/Spinner";
 import axios from "axios";
 import { useDefaultProvider } from "../contexts/default";
 
@@ -27,8 +28,12 @@ function Domains(props) {
   const { darkmode } = useDefaultProvider();
 
   function bottom() {
-    if (pagefull) return;
-    setPage(page + 1);
+    const scrollTop = document.documentElement.scrollTop;
+    const scrollHeight = document.documentElement.scrollHeight;
+    const clientHeight = document.documentElement.clientHeight; //document.documentElement.clientHeight;
+    if (scrollTop + clientHeight >= scrollHeight) {
+      setPage(page + 1);
+    }
     setLoading(true);
   }
 
@@ -40,15 +45,22 @@ function Domains(props) {
   }
 
   useEffect(() => {
-    axios.get(URL + `/${props.tld}/${param}/${page}`, CONFIG).then((response) => {
-      setLoading(false);
-      if (response.data.length === 0) {
-        setPagefull(true);
-        return;
-      }
-      setDomains(domains.concat(response.data));
-    });
+    axios
+      .get(URL + `/${props.tld}/${param}/${page}`, CONFIG)
+      .then((response) => {
+        setLoading(false);
+        if (response.data.length === 0) {
+          setPagefull(true);
+          return;
+        }
+        setDomains(domains.concat(response.data));
+      });
   }, [page]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", bottom);
+    return () => window.removeEventListener("scroll", bottom);
+  }, [domains]);
 
   return (
     <div>
@@ -62,7 +74,7 @@ function Domains(props) {
                 alignItems: "center",
               }}
             >
-              <h2 style={{color: darkmode ? "black" : "white" }}>
+              <h2 style={{ color: darkmode ? "black" : "white" }}>
                 .{props.tld.toUpperCase()} Domains for{" "}
                 {param.replace(/(\d{4})(\d{2})(\d{2})/g, "$1-$2-$3")}
               </h2>
@@ -85,7 +97,7 @@ function Domains(props) {
               <tbody>
                 {domains.map((item) => {
                   return (
-                    <tr>
+                    <tr key={item.domain}>
                       <td key={item.domain}>{item.domain}</td>
                     </tr>
                   );
@@ -97,17 +109,34 @@ function Domains(props) {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                flexDirection: "column"
+                flexDirection: "column-reverse",
               }}
             >
-              {loading ? <BeatLoader loading /> : ""}
-              {pagefull ? (
-                <Button variant="success" onClick={scrollToTop}>
-                  Back to top
+              {loading ? (
+                <Button onClick={() => bottom()} variant="primary" size="sm">
+                  <Spinner
+                    as="span"
+                    animation="grow"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />
+                  Next Page
                 </Button>
               ) : (
-                <Button onClick={() => bottom()} variant="primary" size="sm">Next Page</Button>
+                <Button onClick={() => bottom()} variant="primary" size="sm">
+                  <AiOutlineArrowDown /> Next Page
+                </Button>
               )}
+              {pagefull ? (
+                <Button
+                  style={{ marginBottom: "20px" }}
+                  variant="success"
+                  onClick={scrollToTop}
+                >
+                  Back to top <AiOutlineArrowUp />
+                </Button>
+              ) : null}
             </div>
           </Col>
         </Row>

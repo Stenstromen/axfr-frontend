@@ -3,7 +3,7 @@
 
 ## Todo
 * ~~Add "Home" content~~
-* Add infinite scroll
+* ~~Add infinite scroll~~
 * ~~Add sticky NavBar~~
 * ~~Add responsive NavBar~~
 * ~~Add react-bootstrap breadcrumbs~~
