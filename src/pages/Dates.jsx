@@ -1,10 +1,10 @@
-import React from "react";
 import { useState, useEffect } from "react";
-import BeatLoader from "react-spinners/BeatLoader";
+import { AiOutlineArrowUp, AiOutlineArrowDown } from "react-icons/ai";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
 import Col from "react-bootstrap/Col";
+import Spinner from "react-bootstrap/Spinner";
 import { Link } from "react-router-dom";
 import { MdOutlineDns } from "react-icons/md";
 import Table from "react-bootstrap/Table";
@@ -27,8 +27,12 @@ function Dates(props) {
   const { darkmode } = useDefaultProvider();
 
   function bottom() {
-    if (pagefull) return;
-    setPage(page + 1);
+    const scrollTop = document.documentElement.scrollTop;
+    const scrollHeight = document.documentElement.scrollHeight;
+    const clientHeight = document.documentElement.clientHeight; //document.documentElement.clientHeight;
+    if (scrollTop + clientHeight >= scrollHeight) {
+      setPage(page + 1);
+    }
     setLoading(true);
   }
 
@@ -38,7 +42,6 @@ function Dates(props) {
       behavior: "auto",
     });
   }
-
 
   useEffect(() => {
     axios.get(URL + `/${props.tld}/${page}`, CONFIG).then((response) => {
@@ -50,6 +53,11 @@ function Dates(props) {
       setDates(dates.concat(response.data));
     });
   }, [page]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", bottom);
+    return () => window.removeEventListener("scroll", bottom);
+  }, [dates]);
 
   return (
     <div>
@@ -63,13 +71,17 @@ function Dates(props) {
                 alignItems: "center",
               }}
             >
-              <h2 style={{color: darkmode ? "black" : "white" }}>New .{props.tld.toUpperCase()} Domains</h2>
+              <h2 style={{ color: darkmode ? "black" : "white" }}>
+                New .{props.tld.toUpperCase()} Domains
+              </h2>
             </div>
             <Breadcrumb>
               <Breadcrumb.Item>
                 <Link to={"/"}>Home</Link>
               </Breadcrumb.Item>
-              <Breadcrumb.Item active>{props.tld.toUpperCase()}</Breadcrumb.Item>
+              <Breadcrumb.Item active>
+                {props.tld.toUpperCase()}
+              </Breadcrumb.Item>
             </Breadcrumb>
             <Table striped bordered variant={darkmode ? "light" : "dark"}>
               <thead>
@@ -83,8 +95,8 @@ function Dates(props) {
                 {dates.map((item) => {
                   return (
                     <tr key={item.date}>
-                      <td>{item.date}</td>
-                      <td>{item.amount}</td>
+                      <td key={item.data}>{item.date}</td>
+                      <td key={item.amount}>{item.amount}</td>
                       <td>
                         <Link to={`/${props.tld}/${item.date}`}>
                           <MdOutlineDns size={30} />
@@ -100,17 +112,34 @@ function Dates(props) {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                flexDirection: "column"
+                flexDirection: "column-reverse",
               }}
             >
-              {loading ? <BeatLoader loading /> : ""}
-              {pagefull ? (
-                <Button variant="success" onClick={scrollToTop}>
-                  Back to top
+              {loading ? (
+                <Button onClick={() => bottom()} variant="primary" size="sm">
+                  <Spinner
+                    as="span"
+                    animation="grow"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />
+                  Next Page
                 </Button>
               ) : (
-                <Button onClick={() => bottom()} variant="primary" size="sm">Next Page</Button>
+                <Button onClick={() => bottom()} variant="primary" size="sm">
+                  <AiOutlineArrowDown /> Next Page
+                </Button>
               )}
+              {pagefull ? (
+                <Button
+                  style={{ marginBottom: "20px" }}
+                  variant="success"
+                  onClick={scrollToTop}
+                >
+                  <AiOutlineArrowUp /> Back to top
+                </Button>
+              ) : null}
             </div>
           </Col>
         </Row>
