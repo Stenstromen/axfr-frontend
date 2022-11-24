@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Dates from "./pages/Dates";
 import Domains from "./pages/Domains";
+import Search from "./pages/Search";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import NavBar from "./components/NavBar";
@@ -43,6 +44,7 @@ function App() {
         <Route path="/nu" element={<Dates tld="nu" />} />
         <Route path="/se/:param" element={<Domains tld="se" />} />
         <Route path="/nu/:param" element={<Domains tld="nu" />} />
+        <Route path="/search" element={<Search />} />
       </Routes>
     </div>
   );
