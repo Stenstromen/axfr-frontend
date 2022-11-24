@@ -22,7 +22,6 @@ const CONFIG = {
 function Dates(props) {
   const [page, setPage] = useState(0);
   const [dates, setDates] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [pagefull, setPagefull] = useState(false);
   const { darkmode } = useDefaultProvider();
 
@@ -33,7 +32,6 @@ function Dates(props) {
     if (scrollTop + clientHeight >= scrollHeight) {
       setPage(page + 1);
     }
-    setLoading(true);
   }
 
   function scrollToTop() {
@@ -45,7 +43,6 @@ function Dates(props) {
 
   useEffect(() => {
     axios.get(URL + `/${props.tld}/${page}`, CONFIG).then((response) => {
-      setLoading(false);
       if (response.data.length === 0) {
         setPagefull(true);
         return;
@@ -115,7 +112,15 @@ function Dates(props) {
                 flexDirection: "column-reverse",
               }}
             >
-              {loading ? (
+              {pagefull ? (
+                <Button
+                  style={{ marginBottom: "20px" }}
+                  variant="success"
+                  onClick={scrollToTop}
+                >
+                  Back to top <AiOutlineArrowUp />
+                </Button>
+              ) : (
                 <Button onClick={() => bottom()} variant="primary" size="sm">
                   <Spinner
                     as="span"
@@ -125,21 +130,8 @@ function Dates(props) {
                     aria-hidden="true"
                   />
                   Next Page
-                </Button>
-              ) : (
-                <Button onClick={() => bottom()} variant="primary" size="sm">
-                  <AiOutlineArrowDown /> Next Page
-                </Button>
+                </Button> 
               )}
-              {pagefull ? (
-                <Button
-                  style={{ marginBottom: "20px" }}
-                  variant="success"
-                  onClick={scrollToTop}
-                >
-                  <AiOutlineArrowUp /> Back to top
-                </Button>
-              ) : null}
             </div>
           </Col>
         </Row>

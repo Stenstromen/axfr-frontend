@@ -22,7 +22,6 @@ const CONFIG = {
 function Domains(props) {
   const { param } = useParams();
   const [page, setPage] = useState(0);
-  const [loading, setLoading] = useState(false);
   const [pagefull, setPagefull] = useState(false);
   const [domains, setDomains] = useState([]);
   const { darkmode } = useDefaultProvider();
@@ -30,11 +29,10 @@ function Domains(props) {
   function bottom() {
     const scrollTop = document.documentElement.scrollTop;
     const scrollHeight = document.documentElement.scrollHeight;
-    const clientHeight = document.documentElement.clientHeight; //document.documentElement.clientHeight;
+    const clientHeight = document.documentElement.clientHeight;
     if (scrollTop + clientHeight >= scrollHeight) {
       setPage(page + 1);
     }
-    setLoading(true);
   }
 
   function scrollToTop() {
@@ -48,12 +46,11 @@ function Domains(props) {
     axios
       .get(URL + `/${props.tld}/${param}/${page}`, CONFIG)
       .then((response) => {
-        setLoading(false);
         if (response.data.length === 0) {
           setPagefull(true);
           return;
         }
-        setDomains(domains.concat(response.data));
+        return setDomains(domains.concat(response.data));
       });
   }, [page]);
 
@@ -112,7 +109,15 @@ function Domains(props) {
                 flexDirection: "column-reverse",
               }}
             >
-              {loading ? (
+              {pagefull ? (
+                <Button
+                  style={{ marginBottom: "20px" }}
+                  variant="success"
+                  onClick={scrollToTop}
+                >
+                  Back to top <AiOutlineArrowUp />
+                </Button>
+              ) : (
                 <Button onClick={() => bottom()} variant="primary" size="sm">
                   <Spinner
                     as="span"
@@ -122,21 +127,8 @@ function Domains(props) {
                     aria-hidden="true"
                   />
                   Next Page
-                </Button>
-              ) : (
-                <Button onClick={() => bottom()} variant="primary" size="sm">
-                  <AiOutlineArrowDown /> Next Page
-                </Button>
+                </Button> 
               )}
-              {pagefull ? (
-                <Button
-                  style={{ marginBottom: "20px" }}
-                  variant="success"
-                  onClick={scrollToTop}
-                >
-                  Back to top <AiOutlineArrowUp />
-                </Button>
-              ) : null}
             </div>
           </Col>
         </Row>
