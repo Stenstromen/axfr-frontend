@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { AiOutlineArrowUp, AiOutlineArrowDown } from "react-icons/ai";
+import { AiOutlineArrowUp } from "react-icons/ai";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
@@ -92,7 +92,7 @@ function Dates(props) {
                 {dates.map((item) => {
                   return (
                     <tr key={item.date}>
-                      <td key={item.data}>{item.date}</td>
+                      <td key={item.date}>{item.date}</td>
                       <td key={item.amount}>{item.amount}</td>
                       <td>
                         <Link to={`/${props.tld}/${item.date}`}>
