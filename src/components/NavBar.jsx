@@ -30,6 +30,13 @@ function NavBar() {
           fixed={sticky ? "top" : ""}
         >
           <Container>
+            <img
+              alt=""
+              src="/dns.png"
+              width="30"
+              height="30"
+              className="d-inline-block align-top"
+            />
             <LinkContainer to="/">
               <Navbar.Brand>AXFR.se</Navbar.Brand>
             </LinkContainer>
@@ -38,6 +45,11 @@ function NavBar() {
                 <Nav.Link>
                   <LinkContainer to="/">
                     <NavDropdown.Item>Home</NavDropdown.Item>
+                  </LinkContainer>
+                </Nav.Link>
+                <Nav.Link>
+                  <LinkContainer to="/search">
+                    <NavDropdown.Item>Domain Search</NavDropdown.Item>
                   </LinkContainer>
                 </Nav.Link>
                 <Nav.Link>
@@ -70,6 +82,13 @@ function NavBar() {
           fixed={sticky ? "top" : ""}
         >
           <Container>
+            <img
+              alt=""
+              src="/dns.png"
+              width="30"
+              height="30"
+              className="d-inline-block align-top"
+            />
             <LinkContainer to="/">
               <Navbar.Brand>AXFR.se</Navbar.Brand>
             </LinkContainer>
@@ -79,6 +98,9 @@ function NavBar() {
               </LinkContainer>
               <LinkContainer to="/nu">
                 <Nav.Link>.NU</Nav.Link>
+              </LinkContainer>
+              <LinkContainer to="/search">
+                <Nav.Link>Domain Search</Nav.Link>
               </LinkContainer>
             </Nav>
             <Nav>
