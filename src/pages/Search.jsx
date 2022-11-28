@@ -53,6 +53,7 @@ function Search() {
               <Form.Control
                 autoComplete="off"
                 spellCheck="off"
+                value={query}
                 onChange={(e) => setQuery(e.target.value)}
               />
               {query && isMobile ? (
