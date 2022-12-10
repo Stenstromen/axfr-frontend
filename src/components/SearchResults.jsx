@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import PropTypes from 'prop-types'
 import { AiOutlineArrowUp } from "react-icons/ai";
 import axios from "axios";
 import Table from "react-bootstrap/Table";
@@ -52,7 +53,7 @@ function SearchResults(props) {
           <tbody>
             {searchResult.map((item) => {
               return (
-                <tr>
+                <tr key={item.domain}>
                   <td>{item.domain}</td>
                 </tr>
               );
@@ -80,6 +81,11 @@ function SearchResults(props) {
       </div>
     </div>
   );
+}
+
+SearchResults.propTypes = {
+  tld: PropTypes.string.isRequired,
+  search: PropTypes.string.isRequired
 }
 
 export default SearchResults;

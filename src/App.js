@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDefaultProvider } from "./contexts/default";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";

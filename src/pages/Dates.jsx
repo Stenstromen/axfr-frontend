@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import PropTypes from 'prop-types'
 import { AiOutlineArrowUp } from "react-icons/ai";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -138,6 +139,10 @@ function Dates(props) {
       </Container>
     </div>
   );
+}
+
+Dates.propTypes = {
+  tld: PropTypes.string.isRequired
 }
 
 export default Dates;
