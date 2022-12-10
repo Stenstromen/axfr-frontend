@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import PropTypes from 'prop-types'
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { AiOutlineArrowUp, AiOutlineArrowDown } from "react-icons/ai";
+import { AiOutlineArrowUp } from "react-icons/ai";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
@@ -135,6 +136,10 @@ function Domains(props) {
       </Container>
     </div>
   );
+}
+
+Domains.propTypes = {
+  tld: PropTypes.string.isRequired
 }
 
 export default Domains;
