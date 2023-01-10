@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types";
 import { AiOutlineArrowUp } from "react-icons/ai";
 import axios from "axios";
 import Table from "react-bootstrap/Table";
@@ -28,7 +28,7 @@ function SearchResults(props) {
 
   useEffect(() => {
     setLoading(true);
-    setTimeout(() => {
+    const wait = setTimeout(() => {
       axios
         .get(URL + `/search/${props.tld}/${props.search}`, CONFIG)
         .then((response) => {
@@ -36,13 +36,17 @@ function SearchResults(props) {
           return setSearchResult(response.data);
         });
       setLoading(false);
-    }, 1500);
+    }, 500);
+
+    return () => clearTimeout(wait);
   }, [props.search, props.tld]);
 
   return (
     <div>
       {loading ? (
-        <h1><Spinner animation="border" variant="primary" /></h1>
+        <h1>
+          <Spinner animation="border" variant="primary" />
+        </h1>
       ) : (
         <Table striped bordered variant={darkmode ? "light" : "dark"}>
           <thead>
@@ -85,7 +89,7 @@ function SearchResults(props) {
 
 SearchResults.propTypes = {
   tld: PropTypes.string.isRequired,
-  search: PropTypes.string.isRequired
-}
+  search: PropTypes.string.isRequired,
+};
 
 export default SearchResults;
