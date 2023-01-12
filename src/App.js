@@ -42,8 +42,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/se" element={<Dates tld="se" />} />
         <Route path="/nu" element={<Dates tld="nu" />} />
-        <Route path="/se/:param" element={<Domains tld="se" />} />
-        <Route path="/nu/:param" element={<Domains tld="nu" />} />
+        <Route path="/se/:param" element={<Domains tld="se" url="sedomains"/>} />
+        <Route path="/nu/:param" element={<Domains tld="nu" url="nudomains"/>} />
         <Route path="/search" element={<Search />} />
       </Routes>
     </div>

@@ -44,7 +44,7 @@ function Dates(props) {
 
   useEffect(() => {
     axios.get(URL + `/${props.tld}/${page}`, CONFIG).then((response) => {
-      if (response.data.length === 0) {
+      if (response.data == null) {
         setPagefull(true);
         return;
       }
@@ -142,7 +142,7 @@ function Dates(props) {
 }
 
 Dates.propTypes = {
-  tld: PropTypes.string.isRequired
+  tld: PropTypes.string.isRequired,
 }
 
 export default Dates;

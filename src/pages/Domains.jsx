@@ -45,9 +45,9 @@ function Domains(props) {
 
   useEffect(() => {
     axios
-      .get(URL + `/${props.tld}/${param}/${page}`, CONFIG)
+      .get(URL + `/${props.url}/${param}/${page}`, CONFIG)
       .then((response) => {
-        if (response.data.length === 0) {
+        if (response.data == null) {
           setPagefull(true);
           return;
         }
@@ -139,7 +139,8 @@ function Domains(props) {
 }
 
 Domains.propTypes = {
-  tld: PropTypes.string.isRequired
+  tld: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired
 }
 
 export default Domains;
