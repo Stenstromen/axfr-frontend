@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { AiOutlineArrowUp } from "react-icons/ai";
@@ -44,15 +44,22 @@ function Domains(props) {
   }
 
   useEffect(() => {
-    axios
-      .get(URL + `/${props.url}/${param}/${page}`, CONFIG)
-      .then((response) => {
-        if (response.data == null) {
-          setPagefull(true);
-          return;
-        }
-        return setDomains(domains.concat(response.data));
-      });
+    let url;
+    switch (props.tld) {
+      case "se":
+        url === "sedomains";
+        break;
+      case "nu":
+        url === "nudomains";
+        break;
+    }
+    axios.get(URL + `/${url}/${param}/${page}`, CONFIG).then((response) => {
+      if (response.data == null) {
+        setPagefull(true);
+        return;
+      }
+      return setDomains(domains.concat(response.data));
+    });
   }, [page]);
 
   useEffect(() => {
@@ -128,7 +135,7 @@ function Domains(props) {
                     aria-hidden="true"
                   />
                   Next Page
-                </Button> 
+                </Button>
               )}
             </div>
           </Col>
@@ -140,7 +147,6 @@ function Domains(props) {
 
 Domains.propTypes = {
   tld: PropTypes.string.isRequired,
-  url: PropTypes.string.isRequired
-}
+};
 
 export default Domains;
