@@ -22,6 +22,7 @@ const CONFIG = {
 
 function Domains(props) {
   const { param } = useParams();
+  let url;
   const [page, setPage] = useState(0);
   const [pagefull, setPagefull] = useState(false);
   const [domains, setDomains] = useState([]);
@@ -44,7 +45,6 @@ function Domains(props) {
   }
 
   useEffect(() => {
-    let url;
     switch (props.tld) {
       case "se":
         url === "sedomains";
@@ -53,6 +53,9 @@ function Domains(props) {
         url === "nudomains";
         break;
     }
+  }, []);
+
+  useEffect(() => {
     axios.get(URL + `/${url}/${param}/${page}`, CONFIG).then((response) => {
       if (response.data == null) {
         setPagefull(true);
