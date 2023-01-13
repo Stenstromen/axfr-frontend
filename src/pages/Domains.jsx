@@ -22,7 +22,6 @@ const CONFIG = {
 
 function Domains(props) {
   const { param } = useParams();
-  let url;
   const [page, setPage] = useState(0);
   const [pagefull, setPagefull] = useState(false);
   const [domains, setDomains] = useState([]);
@@ -45,24 +44,15 @@ function Domains(props) {
   }
 
   useEffect(() => {
-    switch (props.tld) {
-      case "se":
-        url === "sedomains";
-        break;
-      case "nu":
-        url === "nudomains";
-        break;
-    }
-  }, []);
-
-  useEffect(() => {
-    axios.get(URL + `/${url}/${param}/${page}`, CONFIG).then((response) => {
-      if (response.data == null) {
-        setPagefull(true);
-        return;
-      }
-      return setDomains(domains.concat(response.data));
-    });
+    axios
+      .get(URL + `/${props.url}/${param}/${page}`, CONFIG)
+      .then((response) => {
+        if (response.data == null) {
+          setPagefull(true);
+          return;
+        }
+        return setDomains(domains.concat(response.data));
+      });
   }, [page]);
 
   useEffect(() => {
@@ -150,6 +140,7 @@ function Domains(props) {
 
 Domains.propTypes = {
   tld: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
 };
 
 export default Domains;
