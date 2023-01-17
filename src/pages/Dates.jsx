@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types";
 import { AiOutlineArrowUp } from "react-icons/ai";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -50,7 +50,7 @@ function Dates(props) {
       }
       setDates(dates.concat(response.data));
     });
-  }, [page]);
+  }, [props.tld, page]);
 
   useEffect(() => {
     window.addEventListener("scroll", bottom);
@@ -131,7 +131,7 @@ function Dates(props) {
                     aria-hidden="true"
                   />
                   Next Page
-                </Button> 
+                </Button>
               )}
             </div>
           </Col>
@@ -143,6 +143,6 @@ function Dates(props) {
 
 Dates.propTypes = {
   tld: PropTypes.string.isRequired,
-}
+};
 
 export default Dates;

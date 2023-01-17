@@ -53,7 +53,7 @@ function Domains(props) {
         }
         return setDomains(domains.concat(response.data));
       });
-  }, [page]);
+  }, [props.tld, page]);
 
   useEffect(() => {
     window.addEventListener("scroll", bottom);
