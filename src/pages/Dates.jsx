@@ -43,6 +43,10 @@ function Dates(props) {
   }
 
   useEffect(() => {
+    setDates([]);
+  }, [props.tld]);
+
+  useEffect(() => {
     axios.get(URL + `/${props.tld}/${page}`, CONFIG).then((response) => {
       if (response.data == null) {
         setPagefull(true);
