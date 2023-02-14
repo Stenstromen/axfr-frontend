@@ -55,6 +55,7 @@ function Search() {
                 spellCheck="off"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
+                autoFocus
               />
               {query && isMobile ? (
                 <Button variant="light" onClick={() => setQuery("")}>
