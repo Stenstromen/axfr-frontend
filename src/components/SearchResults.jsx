@@ -27,6 +27,7 @@ function SearchResults(props) {
   }
 
   useEffect(() => {
+    setSearchResult([])
     setLoading(true);
     const wait = setTimeout(() => {
       axios
