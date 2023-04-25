@@ -55,13 +55,17 @@ function SearchResults(props) {
             </tr>
           </thead>
           <tbody>
-            {searchResult.map((item) => {
-              return (
-                <tr key={item.domain}>
-                  <td>{item.domain}</td>
-                </tr>
-              );
-            })}
+            {searchResult.length === 0 ? (
+              <Spinner animation="border" variant="primary" />
+            ) : (
+              searchResult.map((item) => {
+                return (
+                  <tr key={item.domain}>
+                    <td>{item.domain}</td>
+                  </tr>
+                );
+              })
+            )}
           </tbody>
         </Table>
       )}
