@@ -85,6 +85,9 @@ function Search() {
                 <Dropdown.Item onClick={() => changeTLD("ee")} align="end">
                   .EE
                 </Dropdown.Item>
+                <Dropdown.Item onClick={() => changeTLD("sk")} align="end">
+                  .SK
+                </Dropdown.Item>
               </DropdownButton>
             </InputGroup>
             {query.length >= 3 ? (
