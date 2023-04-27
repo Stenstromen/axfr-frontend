@@ -17,6 +17,7 @@ const CONFIG = {
 function SearchResults(props) {
   const { darkmode } = useDefaultProvider();
   const [searchResult, setSearchResult] = useState([]);
+  const [empty, setEmpty] = useState(false); 
   const [loading, setLoading] = useState(false);
 
   function scrollToTop() {
@@ -33,7 +34,7 @@ function SearchResults(props) {
       axios
         .get(URL + `/search/${props.tld}/${props.search}`, CONFIG)
         .then((response) => {
-          if (response.data.length === 0) return;
+          if (response.data.length === 0) return setEmpty(true);
           return setSearchResult(response.data);
         });
       setLoading(false);
@@ -58,7 +59,7 @@ function SearchResults(props) {
           <tbody>
             {searchResult.length === 0 ? (
               <Spinner animation="border" variant="primary" />
-            ) : searchResult === null ? (
+            ) : empty ? (
               <h5 style={{ color: darkmode ? "black" : "white" }}>
                 No results found
               </h5>
