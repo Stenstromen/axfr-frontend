@@ -9,6 +9,8 @@ import Button from "react-bootstrap/Button";
 import SearchResults from "../components/SearchResults";
 import Container from "react-bootstrap/Container";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
+import ToggleButton from "react-bootstrap/ToggleButton";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { useDefaultProvider } from "../contexts/default";
@@ -49,6 +51,56 @@ function Search() {
               </Breadcrumb.Item>
               <Breadcrumb.Item active>Domain Search</Breadcrumb.Item>
             </Breadcrumb>
+            <ButtonGroup style={{ width: "100%", paddingBottom: "10px", display: isMobile ? "none" : null  }}>
+              <ToggleButton
+                variant="primary"
+                onClick={() => changeTLD("se")}
+                checked={tld === "se"}
+                type="radio"
+              >
+                .SE
+              </ToggleButton>
+              <ToggleButton
+                variant="primary"
+                onClick={() => changeTLD("nu")}
+                checked={tld === "nu"}
+                type="radio"
+              >
+                .NU
+              </ToggleButton>
+              <ToggleButton
+                variant="primary"
+                onClick={() => changeTLD("ch")}
+                checked={tld === "ch"}
+                type="radio"
+              >
+                .CH
+              </ToggleButton>
+              <ToggleButton
+                variant="primary"
+                onClick={() => changeTLD("li")}
+                checked={tld === "li"}
+                type="radio"
+              >
+                .LI
+              </ToggleButton>
+              <ToggleButton
+                variant="primary"
+                onClick={() => changeTLD("ee")}
+                checked={tld === "ee"}
+                type="radio"
+              >
+                .EE
+              </ToggleButton>
+              <ToggleButton
+                variant="primary"
+                onClick={() => changeTLD("sk")}
+                checked={tld === "sk"}
+                type="radio"
+              >
+                .SK
+              </ToggleButton>
+            </ButtonGroup>
             <InputGroup className="mb-3">
               <Form.Control
                 autoComplete="off"
@@ -62,33 +114,35 @@ function Search() {
                   <AiOutlineCloseCircle color="black" />
                 </Button>
               ) : null}
-              <DropdownButton
-                value={tld}
-                onClick={(e) => changeTLD(e.target.value)}
-                variant="primary"
-                title={tld ? "." + tld.toUpperCase() : "TLD"}
-                id="input-group-dropdown-2"
-                align="end"
-              >
-                <Dropdown.Item onClick={() => changeTLD("se")} align="end">
-                  .SE
-                </Dropdown.Item>
-                <Dropdown.Item onClick={() => changeTLD("nu")} align="end">
-                  .NU
-                </Dropdown.Item>
-                <Dropdown.Item onClick={() => changeTLD("ch")} align="end">
-                  .CH
-                </Dropdown.Item>
-                <Dropdown.Item onClick={() => changeTLD("li")} align="end">
-                  .LI
-                </Dropdown.Item>
-                <Dropdown.Item onClick={() => changeTLD("ee")} align="end">
-                  .EE
-                </Dropdown.Item>
-                <Dropdown.Item onClick={() => changeTLD("sk")} align="end">
-                  .SK
-                </Dropdown.Item>
-              </DropdownButton>
+              <div style={{ display: !isMobile ? "none" : null }}>
+                <DropdownButton
+                  value={tld}
+                  onClick={(e) => changeTLD(e.target.value)}
+                  variant="primary"
+                  title={tld ? "." + tld.toUpperCase() : "TLD"}
+                  id="input-group-dropdown-2"
+                  align="end"
+                >
+                  <Dropdown.Item onClick={() => changeTLD("se")} align="end">
+                    .SE
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={() => changeTLD("nu")} align="end">
+                    .NU
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={() => changeTLD("ch")} align="end">
+                    .CH
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={() => changeTLD("li")} align="end">
+                    .LI
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={() => changeTLD("ee")} align="end">
+                    .EE
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={() => changeTLD("sk")} align="end">
+                    .SK
+                  </Dropdown.Item>
+                </DropdownButton>
+              </div>
             </InputGroup>
             {query.length >= 3 ? (
               <SearchResults search={query} tld={tld} />

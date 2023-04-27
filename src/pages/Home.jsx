@@ -48,9 +48,9 @@ function Home() {
           >
             <Card.Body>
               <Card.Title>📝 Domain Search</Card.Title>
-              <Card.Text>Search For .SE And .NU Domains</Card.Text>
+              <Card.Text>Search For .SE, .NU, .CH, .LI, .EE and .SK Domains</Card.Text>
               <Link to={"/search"}>
-                <Button variant="primary">Search .SE/.NU Domains</Button>
+                <Button variant="primary">Search Domains</Button>
               </Link>
             </Card.Body>
           </Card>
@@ -77,7 +77,7 @@ function Home() {
             <Card.Body>
               <Card.Title>📝 Fresh .NU Domains</Card.Title>
               <Card.Text>
-                Newly Added And Updated .SE Domains, Added Yesterday
+                Newly Added And Updated .NU Domains, Added Yesterday
               </Card.Text>
               <Link to={"/nu"}>
                 <Button variant="primary">View .NU Domains</Button>
@@ -99,9 +99,9 @@ function Home() {
           >
             <Card.Body>
               <Card.Title>📝 Domain Search</Card.Title>
-              <Card.Text>Search For .SE And .NU Domains</Card.Text>
+              <Card.Text>Search For .SE, .NU, .CH, .LI, .EE and .SK Domains</Card.Text>
               <Link to={"/search"}>
-                <Button variant="primary">Search .SE/.NU Domains</Button>
+                <Button variant="primary">Search Domains</Button>
               </Link>
             </Card.Body>
           </Card>
@@ -128,7 +128,7 @@ function Home() {
             <Card.Body>
               <Card.Title>📝 Fresh .NU Domains</Card.Title>
               <Card.Text>
-                Newly Added And Updated .SE Domains, Added Yesterday
+                Newly Added And Updated .NU Domains, Added Yesterday
               </Card.Text>
               <Link to={"/nu"}>
                 <Button variant="primary">View .NU Domains</Button>
