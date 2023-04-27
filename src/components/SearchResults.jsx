@@ -39,6 +39,7 @@ function SearchResults(props) {
           return setSearchResult(response.data);
         }).catch(() => {
           setEmpty(true);
+          console.log("Response data is null")
         });
       setLoading(false);
       setEmpty(false);
