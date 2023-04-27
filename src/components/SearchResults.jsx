@@ -17,7 +17,7 @@ const CONFIG = {
 function SearchResults(props) {
   const { darkmode } = useDefaultProvider();
   const [searchResult, setSearchResult] = useState([]);
-  const [empty, setEmpty] = useState(false); 
+  const [empty, setEmpty] = useState(false);
   const [loading, setLoading] = useState(false);
 
   function scrollToTop() {
@@ -35,11 +35,12 @@ function SearchResults(props) {
         .get(URL + `/search/${props.tld}/${props.search}`, CONFIG)
         .then((response) => {
           //if (response.data === null) setEmpty(true)
-          if (response.data.length === 0 ) return 
+          if (response.data.length === 0) return;
           return setSearchResult(response.data);
-        }).catch(() => {
+        })
+        .catch(() => {
           setEmpty(true);
-          console.log("Response data is null")
+          console.log("Response data is null");
         });
       setLoading(false);
       setEmpty(false);
@@ -54,6 +55,10 @@ function SearchResults(props) {
         <h1>
           <Spinner animation="border" variant="primary" />
         </h1>
+      ) : empty ? (
+        <h5 style={{ color: darkmode ? "black" : "white" }}>
+          No results found
+        </h5>
       ) : (
         <Table striped bordered variant={darkmode ? "light" : "dark"}>
           <thead>
@@ -64,10 +69,6 @@ function SearchResults(props) {
           <tbody>
             {searchResult.length === 0 ? (
               <Spinner animation="border" variant="primary" />
-            ) : empty === true ? (
-              <h5 style={{ color: darkmode ? "black" : "white" }}>
-                No results found
-              </h5>
             ) : (
               searchResult.map((item) => {
                 return (
