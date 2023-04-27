@@ -34,7 +34,6 @@ function SearchResults(props) {
       axios
         .get(URL + `/search/${props.tld}/${props.search}`, CONFIG)
         .then((response) => {
-          //if (response.data === null) setEmpty(true)
           if (response.data.length === 0) return;
           return setSearchResult(response.data);
         })
@@ -59,6 +58,8 @@ function SearchResults(props) {
         <h5 style={{ color: darkmode ? "black" : "white" }}>
           No results found
         </h5>
+      ) : searchResult.length === 0 ? (
+        <Spinner animation="border" variant="primary" />
       ) : (
         <Table striped bordered variant={darkmode ? "light" : "dark"}>
           <thead>
@@ -67,20 +68,17 @@ function SearchResults(props) {
             </tr>
           </thead>
           <tbody>
-            {searchResult.length === 0 ? (
-              <Spinner animation="border" variant="primary" />
-            ) : (
-              searchResult.map((item) => {
-                return (
-                  <tr key={item.domain}>
-                    <td>{item.domain}</td>
-                  </tr>
-                );
-              })
-            )}
+            {searchResult.map((item) => {
+              return (
+                <tr key={item.domain}>
+                  <td>{item.domain}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </Table>
       )}
+
       <div
         style={{
           display: "flex",
