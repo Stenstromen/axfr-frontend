@@ -64,7 +64,7 @@ function SearchResults(props) {
           <tbody>
             {searchResult.length === 0 ? (
               <Spinner animation="border" variant="primary" />
-            ) : empty ? (
+            ) : empty === true ? (
               <h5 style={{ color: darkmode ? "black" : "white" }}>
                 No results found
               </h5>
