@@ -27,7 +27,7 @@ function SearchResults(props) {
   }
 
   useEffect(() => {
-    setSearchResult([])
+    setSearchResult([]);
     setLoading(true);
     const wait = setTimeout(() => {
       axios
@@ -58,6 +58,10 @@ function SearchResults(props) {
           <tbody>
             {searchResult.length === 0 ? (
               <Spinner animation="border" variant="primary" />
+            ) : searchResult === null ? (
+              <h5 style={{ color: darkmode ? "black" : "white" }}>
+                No results found
+              </h5>
             ) : (
               searchResult.map((item) => {
                 return (
