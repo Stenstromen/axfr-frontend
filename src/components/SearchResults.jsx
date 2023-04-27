@@ -35,10 +35,13 @@ function SearchResults(props) {
         .get(URL + `/search/${props.tld}/${props.search}`, CONFIG)
         .then((response) => {
           //if (response.data === null) setEmpty(true)
-          if (response.data.length === 0 || response.data === null) return setEmpty(true)
+          if (response.data.length === 0 ) return 
           return setSearchResult(response.data);
+        }).catch(() => {
+          setEmpty(true);
         });
       setLoading(false);
+      setEmpty(false);
     }, 500);
 
     return () => clearTimeout(wait);
