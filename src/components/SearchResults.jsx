@@ -34,8 +34,8 @@ function SearchResults(props) {
       axios
         .get(URL + `/search/${props.tld}/${props.search}`, CONFIG)
         .then((response) => {
-          if (response.data === null) setEmpty(true)
-          if (response.data.length === 0) return;
+          //if (response.data === null) setEmpty(true)
+          if (response.data.length === 0 || response.data === null) return setEmpty(true)
           return setSearchResult(response.data);
         });
       setLoading(false);
