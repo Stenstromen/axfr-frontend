@@ -17,8 +17,19 @@ const CONFIG = {
 function SearchResults(props) {
   const { darkmode } = useDefaultProvider();
   const [searchResult, setSearchResult] = useState([]);
+  const [page, setPage] = useState(0);
   const [empty, setEmpty] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  function bottom() {
+    const scrollTop = document.documentElement.scrollTop;
+    const scrollHeight = document.documentElement.scrollHeight;
+    const clientHeight = document.documentElement.clientHeight;
+    if (scrollTop + clientHeight >= scrollHeight) {
+      setPage(page + 1);
+    }
+    console.log(page);
+  }
 
   function scrollToTop() {
     window.scrollTo({
@@ -28,14 +39,14 @@ function SearchResults(props) {
   }
 
   useEffect(() => {
-    setSearchResult([]);
+    //setSearchResult([]);
     setLoading(true);
     const wait = setTimeout(() => {
       axios
-        .get(URL + `/search/${props.tld}/${props.search}`, CONFIG)
+        .get(URL + `/search/${props.tld}/${props.search}/${page}`, CONFIG)
         .then((response) => {
           if (response.data.length === 0) return;
-          return setSearchResult(response.data);
+          return setSearchResult(searchResult.concat(response.data));
         })
         .catch(() => {
           setEmpty(true);
@@ -46,25 +57,31 @@ function SearchResults(props) {
     }, 500);
 
     return () => clearTimeout(wait);
-  }, [props.search, props.tld]);
+  }, [props.search, props.tld, page]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", bottom);
+    return () => window.removeEventListener("scroll", bottom);
+  }, [searchResult]);
 
   return (
     <div>
-      {loading ? (
-        <h1>
-          <Spinner animation="border" variant="primary" />
-        </h1>
-      ) : empty ? (
+      {empty ? (
         <h5 style={{ color: darkmode ? "black" : "white" }}>
           No results found
         </h5>
-      ) : searchResult.length === 0 ? (
-        <Spinner animation="border" variant="primary" />
       ) : (
         <Table striped bordered variant={darkmode ? "light" : "dark"}>
           <thead>
             <tr>
-              <th>Domain</th>
+              <th>
+                Domain{" "}
+                {loading ? (
+                  <p>Loading</p>
+                ) : searchResult.length === 0 ? (
+                  <p>loading</p>
+                ) : null}
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -87,7 +104,7 @@ function SearchResults(props) {
           flexDirection: "column-reverse",
         }}
       >
-        {searchResult.length >= 30 ? (
+        {empty ? (
           <Button
             style={{ marginBottom: "20px" }}
             variant="success"
@@ -95,7 +112,18 @@ function SearchResults(props) {
           >
             Back to top <AiOutlineArrowUp />
           </Button>
-        ) : null}
+        ) : (
+          <Button onClick={() => bottom()} variant="primary" size="sm">
+            <Spinner
+              as="span"
+              animation="grow"
+              size="sm"
+              role="status"
+              aria-hidden="true"
+            />
+            Next Page
+          </Button>
+        )}
       </div>
     </div>
   );
