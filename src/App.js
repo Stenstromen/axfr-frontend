@@ -11,6 +11,7 @@ import NavBar from "./components/NavBar";
 import setBodyColor from "./setBodyColor";
 
 function App() {
+  const tlds = ["se", "nu", "ch", "li", "ee", "sk"];
   const { setIsMobile, darkmode, setDarkmode } = useDefaultProvider();
 
   darkmode
@@ -39,7 +40,7 @@ function App() {
     <div>
       <NavBar />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home tlds={tlds} />} />
         <Route path="/se" element={<Dates tld="se" />} />
         <Route path="/nu" element={<Dates tld="nu" />} />
         <Route
@@ -50,7 +51,7 @@ function App() {
           path="/nu/:param"
           element={<Domains tld="nu" url="nudomains" />}
         />
-        <Route path="/search" element={<Search />} />
+        <Route path="/search" element={<Search tlds={tlds} />} />
       </Routes>
     </div>
   );

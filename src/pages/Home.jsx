@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -10,7 +11,7 @@ import Stack from "react-bootstrap/Stack";
 
 import { useDefaultProvider } from "../contexts/default";
 
-function Home() {
+function Home({ tlds }) {
   const { isMobile, darkmode } = useDefaultProvider();
   return (
     <div>
@@ -48,7 +49,13 @@ function Home() {
           >
             <Card.Body>
               <Card.Title>📝 Domain Search</Card.Title>
-              <Card.Text>Search For .SE, .NU, .CH, .LI, .EE and .SK Domains</Card.Text>
+              <Card.Text>
+                Search&nbsp;
+                {tlds.map((item) => {
+                  return <>.{item.toUpperCase()}&nbsp;</>;
+                })}
+                Domains
+              </Card.Text>
               <Link to={"/search"}>
                 <Button variant="primary">Search Domains</Button>
               </Link>
@@ -99,7 +106,13 @@ function Home() {
           >
             <Card.Body>
               <Card.Title>📝 Domain Search</Card.Title>
-              <Card.Text>Search For .SE, .NU, .CH, .LI, .EE and .SK Domains</Card.Text>
+              <Card.Text>
+                Search&nbsp;
+                {tlds.map((item) => {
+                  return <>.{item.toUpperCase()}&nbsp;</>;
+                })}
+                Domains
+              </Card.Text>
               <Link to={"/search"}>
                 <Button variant="primary">Search Domains</Button>
               </Link>
@@ -140,5 +153,9 @@ function Home() {
     </div>
   );
 }
+
+Home.propTypes = {
+  tlds: PropTypes.array.isRequired,
+};
 
 export default Home;
