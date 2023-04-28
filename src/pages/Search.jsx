@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Form from "react-bootstrap/Form";
@@ -15,7 +16,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { useDefaultProvider } from "../contexts/default";
 
-function Search() {
+function Search({ tlds }) {
   const { darkmode, isMobile } = useDefaultProvider();
   const [tld, setTld] = useState("");
   const [query, setQuery] = useState("");
@@ -51,55 +52,26 @@ function Search() {
               </Breadcrumb.Item>
               <Breadcrumb.Item active>Domain Search</Breadcrumb.Item>
             </Breadcrumb>
-            <ButtonGroup style={{ width: "100%", paddingBottom: "10px", display: isMobile ? "none" : null  }}>
-              <ToggleButton
-                variant="primary"
-                onClick={() => changeTLD("se")}
-                checked={tld === "se"}
-                type="radio"
-              >
-                .SE
-              </ToggleButton>
-              <ToggleButton
-                variant="primary"
-                onClick={() => changeTLD("nu")}
-                checked={tld === "nu"}
-                type="radio"
-              >
-                .NU
-              </ToggleButton>
-              <ToggleButton
-                variant="primary"
-                onClick={() => changeTLD("ch")}
-                checked={tld === "ch"}
-                type="radio"
-              >
-                .CH
-              </ToggleButton>
-              <ToggleButton
-                variant="primary"
-                onClick={() => changeTLD("li")}
-                checked={tld === "li"}
-                type="radio"
-              >
-                .LI
-              </ToggleButton>
-              <ToggleButton
-                variant="primary"
-                onClick={() => changeTLD("ee")}
-                checked={tld === "ee"}
-                type="radio"
-              >
-                .EE
-              </ToggleButton>
-              <ToggleButton
-                variant="primary"
-                onClick={() => changeTLD("sk")}
-                checked={tld === "sk"}
-                type="radio"
-              >
-                .SK
-              </ToggleButton>
+            <ButtonGroup
+              style={{
+                width: "100%",
+                paddingBottom: "10px",
+                display: isMobile ? "none" : null,
+              }}
+            >
+              {tlds.map((item) => {
+                return (
+                  <ToggleButton
+                    key={item}
+                    variant="primary"
+                    onClick={() => changeTLD(item)}
+                    checked={tld === item}
+                    type="radio"
+                  >
+                    .{item.toUpperCase()}
+                  </ToggleButton>
+                );
+              })}
             </ButtonGroup>
             <InputGroup className="mb-3">
               <Form.Control
@@ -123,24 +95,17 @@ function Search() {
                   id="input-group-dropdown-2"
                   align="end"
                 >
-                  <Dropdown.Item onClick={() => changeTLD("se")} align="end">
-                    .SE
-                  </Dropdown.Item>
-                  <Dropdown.Item onClick={() => changeTLD("nu")} align="end">
-                    .NU
-                  </Dropdown.Item>
-                  <Dropdown.Item onClick={() => changeTLD("ch")} align="end">
-                    .CH
-                  </Dropdown.Item>
-                  <Dropdown.Item onClick={() => changeTLD("li")} align="end">
-                    .LI
-                  </Dropdown.Item>
-                  <Dropdown.Item onClick={() => changeTLD("ee")} align="end">
-                    .EE
-                  </Dropdown.Item>
-                  <Dropdown.Item onClick={() => changeTLD("sk")} align="end">
-                    .SK
-                  </Dropdown.Item>
+                  {tlds.map((item) => {
+                    return (
+                      <Dropdown.Item
+                        key={item}
+                        onClick={() => changeTLD(item)}
+                        align="end"
+                      >
+                        .{item.toUpperCase()}
+                      </Dropdown.Item>
+                    );
+                  })}
                 </DropdownButton>
               </div>
             </InputGroup>
@@ -157,5 +122,9 @@ function Search() {
     </div>
   );
 }
+
+Search.propTypes = {
+  tlds: PropTypes.array.isRequired,
+};
 
 export default Search;
