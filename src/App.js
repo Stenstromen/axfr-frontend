@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Dates from "./pages/Dates";
 import Domains from "./pages/Domains";
 import Search from "./pages/Search";
+import Stats from "./pages/Stats";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import NavBar from "./components/NavBar";
@@ -52,6 +53,7 @@ function App() {
           element={<Domains tld="nu" url="nudomains" />}
         />
         <Route path="/search" element={<Search tlds={tlds} />} />
+        <Route path="/stats" element={<Stats />} />
       </Routes>
     </div>
   );
