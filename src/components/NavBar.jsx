@@ -102,6 +102,9 @@ function NavBar() {
               <LinkContainer to="/search">
                 <Nav.Link>Domain Search</Nav.Link>
               </LinkContainer>
+              <LinkContainer to="/stats">
+                <Nav.Link>Domain Stats</Nav.Link>
+              </LinkContainer>
             </Nav>
             <Nav>
               <Nav.Link onClick={() => setDarkmode(!darkmode)}>

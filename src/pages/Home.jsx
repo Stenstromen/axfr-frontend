@@ -67,6 +67,21 @@ function Home({ tlds }) {
             style={{ width: "300px" }}
           >
             <Card.Body>
+              <Card.Title>📝 Domain Stats</Card.Title>
+              <Card.Text>
+                Domain stats for .SE, .NU, .CH, .LI, .EE, .SK
+              </Card.Text>
+              <Link to={"/stats"}>
+                <Button variant="primary">View Domain Stats</Button>
+              </Link>
+            </Card.Body>
+          </Card>
+          <Card
+            bg={darkmode ? "light" : "dark"}
+            text={darkmode ? "dark" : "light"}
+            style={{ width: "300px" }}
+          >
+            <Card.Body>
               <Card.Title>📝 Fresh .SE Domains</Card.Title>
               <Card.Text>
                 Newly Added And Updated .SE Domains, Added Yesterday
@@ -115,6 +130,21 @@ function Home({ tlds }) {
               </Card.Text>
               <Link to={"/search"}>
                 <Button variant="primary">Search Domains</Button>
+              </Link>
+            </Card.Body>
+          </Card>
+          <Card
+            bg={darkmode ? "light" : "dark"}
+            text={darkmode ? "dark" : "light"}
+            style={{ width: "32rem", height: "200px" }}
+          >
+            <Card.Body>
+              <Card.Title>📝 Domain Stats</Card.Title>
+              <Card.Text>
+                Domain stats for .SE, .NU, .CH, .LI, .EE, .SK
+              </Card.Text>
+              <Link to={"/stats"}>
+                <Button variant="primary">View Domain Stats</Button>
               </Link>
             </Card.Body>
           </Card>
