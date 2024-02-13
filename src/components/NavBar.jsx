@@ -3,6 +3,7 @@ import { useDefaultProvider } from "../contexts/default";
 import { Container, Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { MdOutlineLightMode, MdOutlineDarkMode } from "react-icons/md";
+import { Helmet } from "react-helmet";
 
 function NavBar() {
   const [sticky, setSticky] = useState(false);
@@ -22,6 +23,9 @@ function NavBar() {
 
   return (
     <div>
+      <Helmet>
+        <meta name="theme-color" content={darkmode ? "#0d6efd" : "#212529"} />
+      </Helmet>
       {isMobile ? (
         <Navbar
           expand="sm"
