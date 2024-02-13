@@ -16,7 +16,8 @@ import { useDefaultProvider } from "../contexts/default";
 const URL = process.env.REACT_APP_BACKEND_URL;
 const CONFIG = {
   headers: {
-    authorization: process.env.REACT_APP_AUTHORIZATION,
+    'Content-Type': 'application/json',
+    'Authorization': process.env.REACT_APP_AUTHORIZATION,
   },
 };
 

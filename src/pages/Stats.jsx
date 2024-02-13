@@ -23,9 +23,12 @@ function Stats() {
   const URL = process.env.REACT_APP_BACKEND_URL;
   const CONFIG = {
     headers: {
-      authorization: process.env.REACT_APP_AUTHORIZATION,
+      'Content-Type': 'application/json',
+      'Accept' : 'application/json',
+      'Authorization': process.env.REACT_APP_AUTHORIZATION,
     },
   };
+
   const tlds = ["se", "nu", "ch", "li", "ee", "sk"];
   const [tld, setTld] = useState("");
   const [stats, setStats] = useState([]);
