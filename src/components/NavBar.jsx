@@ -57,6 +57,11 @@ function NavBar() {
                   </LinkContainer>
                 </Nav.Link>
                 <Nav.Link>
+                  <LinkContainer to="/stats">
+                    <NavDropdown.Item>Domain Stats</NavDropdown.Item>
+                  </LinkContainer>
+                </Nav.Link>
+                <Nav.Link>
                   <LinkContainer to="/se">
                     <NavDropdown.Item>.SE</NavDropdown.Item>
                   </LinkContainer>
