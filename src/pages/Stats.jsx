@@ -23,9 +23,9 @@ function Stats() {
   const URL = process.env.REACT_APP_BACKEND_URL;
   const CONFIG = {
     headers: {
-      'Content-Type': 'application/json',
-      'Accept' : 'application/json',
-      'Authorization': process.env.REACT_APP_AUTHORIZATION,
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: process.env.REACT_APP_AUTHORIZATION,
     },
   };
 
@@ -41,7 +41,8 @@ function Stats() {
   useEffect(() => {
     setLoading(true);
     axios.get(`${URL}/stats/${tld}`, CONFIG).then((response) => {
-      setStats(response.data);
+      const filteredStats = response.data.filter((stat) => stat.amount >= 1000);
+      setStats(filteredStats);
       setLoading(false);
     });
   }, [tld]);
