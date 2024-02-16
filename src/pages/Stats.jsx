@@ -18,6 +18,11 @@ import Spinner from "react-bootstrap/Spinner";
 import { Link } from "react-router-dom";
 import { useDefaultProvider } from "../contexts/default";
 
+function formatDate(tickItem) {
+  const [year, month] = tickItem.split('-');
+  return `${year}-${month}`;
+}
+
 function formatLargeNumber(tickItem) {
   if (tickItem >= 1000000) {
     return `${(tickItem / 1000000).toFixed(1)}M`;
@@ -141,7 +146,7 @@ function Stats() {
                 fill="url(#colorAmount)"
               />
               <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-              <XAxis dataKey="date" />
+              <XAxis dataKey="date" tickFormatter={formatDate} />
               <YAxis tickFormatter={formatLargeNumber} />
               <Tooltip />
             </AreaChart>
