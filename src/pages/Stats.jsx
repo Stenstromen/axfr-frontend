@@ -18,6 +18,15 @@ import Spinner from "react-bootstrap/Spinner";
 import { Link } from "react-router-dom";
 import { useDefaultProvider } from "../contexts/default";
 
+function formatLargeNumber(tickItem) {
+  if (tickItem >= 1000000) {
+    return `${(tickItem / 1000000).toFixed(1)}M`;
+  } else if (tickItem >= 1000) {
+    return `${(tickItem / 1000).toFixed(1)}K`;
+  }
+  return tickItem;
+}
+
 function Stats() {
   const { darkmode, isMobile } = useDefaultProvider();
   const URL = process.env.REACT_APP_BACKEND_URL;
@@ -133,7 +142,7 @@ function Stats() {
               />
               <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
               <XAxis dataKey="date" />
-              <YAxis />
+              <YAxis tickFormatter={formatLargeNumber} />
               <Tooltip />
             </AreaChart>
           </Col>
