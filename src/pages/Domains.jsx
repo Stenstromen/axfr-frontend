@@ -84,7 +84,9 @@ function Domains(props) {
               <Breadcrumb.Item>
                 <Link to={`/${props.tld}`}>{props.tld.toUpperCase()}</Link>
               </Breadcrumb.Item>
-              <Breadcrumb.Item active>{param}</Breadcrumb.Item>
+              <Breadcrumb.Item variant={darkmode ? "light" : "dark"} active>
+                {param}
+              </Breadcrumb.Item>
             </Breadcrumb>
             <Table striped bordered variant={darkmode ? "light" : "dark"}>
               <thead>
