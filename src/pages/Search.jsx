@@ -75,6 +75,7 @@ function Search({ tlds }) {
             </ButtonGroup>
             <InputGroup className="mb-3">
               <Form.Control
+                style={{ color: darkmode ? "black" : "white" }}
                 autoComplete="off"
                 spellCheck="off"
                 value={query}
