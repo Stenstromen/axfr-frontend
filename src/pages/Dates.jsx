@@ -16,8 +16,8 @@ import { useDefaultProvider } from "../contexts/default";
 const URL = process.env.REACT_APP_BACKEND_URL;
 const CONFIG = {
   headers: {
-    'Content-Type': 'application/json',
-    'Authorization': process.env.REACT_APP_AUTHORIZATION,
+    "Content-Type": "application/json",
+    Authorization: process.env.REACT_APP_AUTHORIZATION,
   },
 };
 
@@ -34,23 +34,24 @@ function Dates(props) {
     const scrollTop = document.documentElement.scrollTop;
     const scrollHeight = document.documentElement.scrollHeight;
     const clientHeight = document.documentElement.clientHeight;
-    
+
     if (scrollTop + clientHeight >= scrollHeight - 800) {
       setIsLoading(true);
-      setPage(prev => prev + 1);
+      setPage((prev) => prev + 1);
     }
   }, [isLoading, pagefull]);
 
   function scrollToTop() {
     window.scrollTo({
       top: 0,
-      behavior: "smooth"
+      behavior: "smooth",
     });
   }
 
   useEffect(() => {
     setIsLoading(true);
-    axios.get(URL + `/${props.tld}/0`, CONFIG)
+    axios
+      .get(URL + `/${props.tld}/0`, CONFIG)
       .then((response) => {
         if (response.data == null) {
           setPagefull(true);
@@ -67,12 +68,13 @@ function Dates(props) {
     if (page === 0) return;
 
     setIsLoading(true);
-    axios.get(URL + `/${props.tld}/${page}`, CONFIG)
+    axios
+      .get(URL + `/${props.tld}/${page}`, CONFIG)
       .then((response) => {
         if (response.data == null) {
           setPagefull(true);
         } else {
-          setDates(prev => [...prev, ...response.data]);
+          setDates((prev) => [...prev, ...response.data]);
         }
       })
       .finally(() => {
@@ -120,7 +122,7 @@ function Dates(props) {
                 <tr>
                   <th>Domain Name</th>
                   <th>Domain Amount</th>
-                  <th>View</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -132,6 +134,7 @@ function Dates(props) {
                       <td>
                         <Link to={`/${props.tld}/${item.date}`}>
                           <MdOutlineDns size={30} />
+                          &nbsp;Click to View Domains
                         </Link>
                       </td>
                     </tr>
