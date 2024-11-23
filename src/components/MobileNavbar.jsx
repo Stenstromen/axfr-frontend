@@ -1,7 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Nav, NavDropdown } from "react-bootstrap";
-import { LinkContainer } from "react-router-bootstrap";
+import { Link } from "react-router-dom";
+
 function MobileNavbar({ darkmode, locations }) {
   return (
     <>
@@ -22,7 +23,7 @@ function MobileNavbar({ darkmode, locations }) {
             backgroundColor: darkmode ? "white" : "#212529",
           }}>
             {locations.map((location, index) => (
-              <LinkContainer key={index} to={location.path}>
+              <Nav.Link as={Link} key={index} to={location.path}>
                 <NavDropdown.Item
                   style={{
                     backgroundColor: darkmode ? "white" : "#212529",
@@ -34,7 +35,7 @@ function MobileNavbar({ darkmode, locations }) {
                     {location.name}
                   </span>
                 </NavDropdown.Item>
-              </LinkContainer>
+              </Nav.Link>
             ))}
           </div>
         </NavDropdown>

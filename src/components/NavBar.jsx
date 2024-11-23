@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDefaultProvider } from "../contexts/default";
 import { Container, Navbar } from "react-bootstrap";
-import { LinkContainer } from "react-router-bootstrap";
+import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { MdOutlineLightMode, MdOutlineDarkMode } from "react-icons/md";
 import { Nav } from "react-bootstrap";
@@ -50,9 +50,9 @@ function NavBar() {
             className="d-inline-block align-top"
             aria-label="AXFR.se Logo"
           />
-          <LinkContainer to="/">
-            <Navbar.Brand>AXFR.se</Navbar.Brand>
-          </LinkContainer>
+          <Navbar.Brand as={Link} to="/">
+            AXFR.se
+          </Navbar.Brand>
           {isMobile ? (
             <MobileNavbar
               locations={locations}

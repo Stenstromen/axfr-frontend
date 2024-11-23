@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDefaultProvider } from "./contexts/default";
-import { Routes, Route } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import Home from "./pages/Home";
 import Dates from "./pages/Dates";
 import Domains from "./pages/Domains";
@@ -11,8 +11,53 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import NavBar from "./components/NavBar";
 import setBodyColor from "./setBodyColor";
 
+function Root() {
+  return (
+    <>
+      <NavBar />
+      <Outlet />
+    </>
+  );
+}
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+    children: [
+      {
+        index: true,
+        element: <Home tlds={["se", "nu", "ch", "li", "ee", "sk"]} />,
+      },
+      {
+        path: "se",
+        element: <Dates tld="se" />,
+      },
+      {
+        path: "se/:param",
+        element: <Domains tld="se" />,
+      },
+      {
+        path: "nu",
+        element: <Dates tld="nu" />,
+      },
+      {
+        path: "nu/:param",
+        element: <Domains tld="nu" />,
+      },
+      {
+        path: "search",
+        element: <Search tlds={["se", "nu", "ch", "li", "ee", "sk"]} />,
+      },
+      {
+        path: "stats",
+        element: <Stats />,
+      },
+    ],
+  },
+]);
+
 function App() {
-  const tlds = ["se", "nu", "ch", "li", "ee", "sk"];
   const { setIsMobile, darkmode, setDarkmode } = useDefaultProvider();
 
   darkmode
@@ -37,26 +82,7 @@ function App() {
   }, []);
 
   handleResize();
-  return (
-    <div>
-      <NavBar />
-      <Routes>
-        <Route path="/" element={<Home tlds={tlds} />} />
-        <Route path="/se" element={<Dates tld="se" />} />
-        <Route path="/nu" element={<Dates tld="nu" />} />
-        <Route
-          path="/se/:param"
-          element={<Domains tld="se" url="sedomains" />}
-        />
-        <Route
-          path="/nu/:param"
-          element={<Domains tld="nu" url="nudomains" />}
-        />
-        <Route path="/search" element={<Search tlds={tlds} />} />
-        <Route path="/stats" element={<Stats />} />
-      </Routes>
-    </div>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;

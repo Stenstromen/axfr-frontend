@@ -14,10 +14,10 @@ import axios from "axios";
 import { useDefaultProvider } from "../contexts/default";
 import punycode from 'punycode';
 
-const URL = process.env.REACT_APP_BACKEND_URL;
+const URL = import.meta.env.VITE_BACKEND_URL;
 const CONFIG = {
   headers: {
-    authorization: process.env.REACT_APP_AUTHORIZATION,
+    authorization: import.meta.env.VITE_AUTHORIZATION,
   },
 };
 
@@ -46,6 +46,17 @@ function Domains(props) {
   const { darkmode } = useDefaultProvider();
   const [isLoading, setIsLoading] = useState(false);
 
+  const getUrlPath = () => {
+    switch (props.tld) {
+      case 'se':
+        return 'sedomains';
+      case 'nu':
+        return 'nudomains';
+      default:
+        return props.url;
+    }
+  };
+
   const bottom = useCallback(() => {
     if (isLoading || pagefull) return;
 
@@ -69,7 +80,7 @@ function Domains(props) {
   useEffect(() => {
     setIsLoading(true);
     axios
-      .get(URL + `/${props.url}/${param}/0`, CONFIG)
+      .get(URL + `/${getUrlPath()}/${param}/0`, CONFIG)
       .then((response) => {
         if (response.data == null) {
           setPagefull(true);
@@ -80,14 +91,14 @@ function Domains(props) {
       .finally(() => {
         setIsLoading(false);
       });
-  }, [param, props.url]);
+  }, [param, props.tld]);
 
   useEffect(() => {
     if (page === 0) return;
 
     setIsLoading(true);
     axios
-      .get(URL + `/${props.url}/${param}/${page}`, CONFIG)
+      .get(URL + `/${getUrlPath()}/${param}/${page}`, CONFIG)
       .then((response) => {
         if (response.data == null) {
           setPagefull(true);
@@ -98,7 +109,7 @@ function Domains(props) {
       .finally(() => {
         setIsLoading(false);
       });
-  }, [props.tld, page, param, props.url]);
+  }, [props.tld, page, param]);
 
   useEffect(() => {
     const handleScroll = () => {
