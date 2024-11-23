@@ -1,15 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import { BrowserRouter } from "react-router-dom";
 import { DefaultProvider } from "./contexts/default";
 import App from "./App";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-    <DefaultProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </DefaultProvider>
+  <DefaultProvider>
+    <App />
+  </DefaultProvider>
 );
