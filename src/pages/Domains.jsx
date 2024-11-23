@@ -14,10 +14,10 @@ import axios from "axios";
 import { useDefaultProvider } from "../contexts/default";
 import punycode from 'punycode';
 
-const URL = process.env.REACT_APP_BACKEND_URL;
+const URL = import.meta.env.VITE_BACKEND_URL;
 const CONFIG = {
   headers: {
-    authorization: process.env.REACT_APP_AUTHORIZATION,
+    authorization: import.meta.env.VITE_AUTHORIZATION,
   },
 };
 

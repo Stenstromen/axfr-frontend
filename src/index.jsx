@@ -4,7 +4,6 @@ import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import { DefaultProvider } from "./contexts/default";
 import App from "./App";
-import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -14,5 +13,3 @@ root.render(
       </BrowserRouter>
     </DefaultProvider>
 );
-
-reportWebVitals();
