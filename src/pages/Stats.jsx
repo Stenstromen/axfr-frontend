@@ -71,10 +71,15 @@ function Stats() {
     
     if (difference === 0) return null;
     
+    const percentageChange = (Math.abs(difference) / thirtyDaysAgoMetric) * 100;
+    const formattedPercentage = percentageChange < 1 
+      ? percentageChange.toFixed(3) 
+      : percentageChange.toFixed(1);
+    
     return {
       direction: difference > 0,
       difference: Math.abs(difference),
-      percentage: ((Math.abs(difference) / thirtyDaysAgoMetric) * 100).toFixed(1),
+      percentage: formattedPercentage,
       comparedTo: stats[stats.length - 31].date
     };
   };
