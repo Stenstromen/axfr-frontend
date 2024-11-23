@@ -7,32 +7,36 @@ function MobileNavbar({ darkmode, locations }) {
     <>
       <Nav className="me-auto">
         <NavDropdown
-          title="Domains"
+          title={
+            <span style={{ color: "white" }}>
+              Menu
+            </span>
+          }
           id="basic-nav-dropdown"
+          menuVariant={darkmode ? "light" : "dark"}
           style={{
-            color: darkmode ? "black" : "white",
+            backgroundColor: darkmode ? "#0d6efd" : "#212529",
           }}
         >
-          {locations.map((location, index) => (
-            <Nav.Link
-              key={index}
-              style={{
-                color: darkmode ? "white" : "black",
-                backgroundColor: darkmode ? "white" : "black",
-              }}
-            >
-              <LinkContainer to={location.path}>
+          <div style={{
+            backgroundColor: darkmode ? "white" : "#212529",
+          }}>
+            {locations.map((location, index) => (
+              <LinkContainer key={index} to={location.path}>
                 <NavDropdown.Item
                   style={{
-                    color: darkmode ? "white" : "black",
-                    backgroundColor: darkmode ? "white" : "black",
+                    backgroundColor: darkmode ? "white" : "#212529",
                   }}
                 >
-                  {location.name}
+                  <span style={{
+                    color: darkmode ? "black" : "white",
+                  }}>
+                    {location.name}
+                  </span>
                 </NavDropdown.Item>
               </LinkContainer>
-            </Nav.Link>
-          ))}
+            ))}
+          </div>
         </NavDropdown>
       </Nav>
     </>
