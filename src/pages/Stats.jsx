@@ -35,12 +35,12 @@ function formatLargeNumber(tickItem) {
 
 function Stats() {
   const { darkmode, isMobile } = useDefaultProvider();
-  const URL = process.env.REACT_APP_BACKEND_URL;
+  const URL = import.meta.env.VITE_BACKEND_URL;
   const CONFIG = {
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      Authorization: process.env.REACT_APP_AUTHORIZATION,
+      Authorization: import.meta.env.VITE_AUTHORIZATION,
     },
   };
 
