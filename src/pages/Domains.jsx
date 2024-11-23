@@ -12,12 +12,30 @@ import Col from "react-bootstrap/Col";
 import Spinner from "react-bootstrap/Spinner";
 import axios from "axios";
 import { useDefaultProvider } from "../contexts/default";
+import punycode from 'punycode';
 
 const URL = process.env.REACT_APP_BACKEND_URL;
 const CONFIG = {
   headers: {
     authorization: process.env.REACT_APP_AUTHORIZATION,
   },
+};
+
+const formatDomain = (domain, darkmode) => {
+  try {
+    const decoded = punycode.toUnicode(domain);
+    if (decoded !== domain) {
+      return (
+        <span>
+          {decoded} <span style={{ color: darkmode ? "#6c757d" : "#adb5bd" }}>({domain})</span>
+        </span>
+      );
+    }
+    return domain;
+  } catch (error) {
+    console.error("Punycode conversion error:", error);
+    return domain;
+  }
 };
 
 function Domains(props) {
@@ -131,7 +149,7 @@ function Domains(props) {
                 {domains.map((item) => {
                   return (
                     <tr key={item.domain}>
-                      <td key={item.domain}>{item.domain}</td>
+                      <td key={item.domain}>{formatDomain(item.domain, darkmode)}</td>
                     </tr>
                   );
                 })}

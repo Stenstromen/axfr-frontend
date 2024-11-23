@@ -15,16 +15,28 @@ import ToggleButton from "react-bootstrap/ToggleButton";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { useDefaultProvider } from "../contexts/default";
+import punycode from 'punycode';
 
 function Search({ tlds }) {
   const { darkmode, isMobile } = useDefaultProvider();
   const [tld, setTld] = useState("");
   const [query, setQuery] = useState("");
+  const [punycodeQuery, setPunycodeQuery] = useState("");
 
   const changeTLD = (tld) => {
     setTld(tld);
-    setQuery(query);
   };
+
+  // Convert to punycode when query changes
+  useEffect(() => {
+    try {
+      const encoded = punycode.toASCII(query);
+      setPunycodeQuery(encoded);
+    } catch (error) {
+      console.error("Punycode conversion error:", error);
+      setPunycodeQuery(query);
+    }
+  }, [query]);
 
   useEffect(() => {
     setTld("se");
@@ -111,7 +123,7 @@ function Search({ tlds }) {
               </div>
             </InputGroup>
             {query.length >= 3 ? (
-              <SearchResults search={query} tld={tld} />
+              <SearchResults search={punycodeQuery} tld={tld} />
             ) : (
               <h5 style={{ color: darkmode ? "black" : "white" }}>
                 Please enter at least 3 characters to search...

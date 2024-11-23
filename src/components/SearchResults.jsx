@@ -6,6 +6,7 @@ import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import { useDefaultProvider } from "../contexts/default";
+import punycode from 'punycode';
 
 const URL = process.env.REACT_APP_BACKEND_URL;
 const CONFIG = {
@@ -48,6 +49,23 @@ function SearchResults(props) {
     return () => clearTimeout(wait);
   }, [props.search, props.tld]);
 
+  const formatDomain = (domain) => {
+    try {
+      const decoded = punycode.toUnicode(domain);
+      if (decoded !== domain) {
+        return (
+          <span>
+            {decoded} <span style={{ color: darkmode ? "#6c757d" : "#adb5bd" }}>({domain})</span>
+          </span>
+        );
+      }
+      return domain;
+    } catch (error) {
+      console.error("Punycode conversion error:", error);
+      return domain;
+    }
+  };
+
   return (
     <div>
       {loading ? (
@@ -71,7 +89,7 @@ function SearchResults(props) {
             {searchResult.map((item) => {
               return (
                 <tr key={item.domain}>
-                  <td>{item.domain}</td>
+                  <td>{formatDomain(item.domain)}</td>
                 </tr>
               );
             })}
