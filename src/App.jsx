@@ -1,15 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, lazy } from "react";
 import { useDefaultProvider } from "./contexts/default";
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
-import Home from "./pages/Home";
-import Dates from "./pages/Dates";
-import Domains from "./pages/Domains";
-import Search from "./pages/Search";
-import Stats from "./pages/Stats";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import NavBar from "./components/NavBar";
 import setBodyColor from "./setBodyColor";
+
+const Home = lazy(() => import('./pages/Home'));
+const Stats = lazy(() => import('./pages/Stats'));
+const Search = lazy(() => import('./pages/Search'));
+const Dates = lazy(() => import('./pages/Dates'));
+const Domains = lazy(() => import('./pages/Domains'));
 
 function Root() {
   return (
