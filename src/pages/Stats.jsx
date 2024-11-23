@@ -17,6 +17,7 @@ import Breadcrumb from "react-bootstrap/Breadcrumb";
 import Spinner from "react-bootstrap/Spinner";
 import { Link } from "react-router-dom";
 import { useDefaultProvider } from "../contexts/default";
+import { AiOutlineArrowUp, AiOutlineArrowDown } from 'react-icons/ai';
 
 function formatDate(tickItem) {
   const [year, month] = tickItem.split('-');
@@ -60,6 +61,28 @@ function Stats() {
       setLoading(false);
     });
   }, [tld]);
+
+  const getTrend = () => {
+    if (stats.length < 31) return null;
+    
+    const lastMetric = stats[stats.length - 1].amount;
+    const thirtyDaysAgoMetric = stats[stats.length - 31].amount;
+    const difference = lastMetric - thirtyDaysAgoMetric;
+    
+    if (difference === 0) return null;
+    
+    const percentageChange = (Math.abs(difference) / thirtyDaysAgoMetric) * 100;
+    const formattedPercentage = percentageChange < 1 
+      ? percentageChange.toFixed(3) 
+      : percentageChange.toFixed(1);
+    
+    return {
+      direction: difference > 0,
+      difference: Math.abs(difference),
+      percentage: formattedPercentage,
+      comparedTo: stats[stats.length - 31].date
+    };
+  };
 
   return (
     <div>
@@ -118,11 +141,30 @@ function Stats() {
                 </h1>
               ) : (
                 <p style={{ color: darkmode ? "black" : "white" }}>
-                  Epoch {stats[0]?.date} - Last Metric{" "}
-                  {stats.length > 0 &&
-                    new Intl.NumberFormat("fr-FR").format(
-                      stats[stats.length - 1].amount
-                    )}
+                  Epoch {stats[0]?.date} - Last Metric{" "} 
+                  {stats.length > 0 && (
+                    <>
+                      {new Intl.NumberFormat("fr-FR").format(stats[stats.length - 1].amount)} -
+                      {getTrend() && (
+                        <span
+                          style={{
+                            color: getTrend().direction ? "#198754" : "#dc3545",
+                            marginLeft: "10px",
+                          }}
+                        >
+                          {getTrend().direction ? (
+                            <AiOutlineArrowUp />
+                          ) : (
+                            <AiOutlineArrowDown />
+                          )}
+                          {" "}
+                          {new Intl.NumberFormat("fr-FR").format(getTrend().difference)}
+                          {" "}
+                          ({getTrend().percentage}%) vs {getTrend().comparedTo}
+                        </span>
+                      )}
+                    </>
+                  )}
                 </p>
               )}
             </div>
