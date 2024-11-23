@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import { AiOutlineArrowUp } from "react-icons/ai";
 import Container from "react-bootstrap/Container";
@@ -26,37 +26,70 @@ function Dates(props) {
   const [dates, setDates] = useState([]);
   const [pagefull, setPagefull] = useState(false);
   const { darkmode } = useDefaultProvider();
+  const [isLoading, setIsLoading] = useState(false);
 
-  function bottom() {
+  const bottom = useCallback(() => {
+    if (isLoading || pagefull) return;
+
     const scrollTop = document.documentElement.scrollTop;
     const scrollHeight = document.documentElement.scrollHeight;
-    const clientHeight = document.documentElement.clientHeight; //document.documentElement.clientHeight;
-    if (scrollTop + clientHeight >= scrollHeight) {
-      setPage(page + 1);
+    const clientHeight = document.documentElement.clientHeight;
+    
+    if (scrollTop + clientHeight >= scrollHeight - 800) {
+      setIsLoading(true);
+      setPage(prev => prev + 1);
     }
-  }
+  }, [isLoading, pagefull]);
 
   function scrollToTop() {
     window.scrollTo({
       top: 0,
-      behavior: "auto",
+      behavior: "smooth"
     });
   }
 
   useEffect(() => {
-    axios.get(URL + `/${props.tld}/${page}`, CONFIG).then((response) => {
-      if (response.data == null) {
-        setPagefull(true);
-        return;
-      }
-      setDates(dates.concat(response.data));
-    });
+    setIsLoading(true);
+    axios.get(URL + `/${props.tld}/0`, CONFIG)
+      .then((response) => {
+        if (response.data == null) {
+          setPagefull(true);
+        } else {
+          setDates(response.data);
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [props.tld]);
+
+  useEffect(() => {
+    if (page === 0) return;
+
+    setIsLoading(true);
+    axios.get(URL + `/${props.tld}/${page}`, CONFIG)
+      .then((response) => {
+        if (response.data == null) {
+          setPagefull(true);
+        } else {
+          setDates(prev => [...prev, ...response.data]);
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, [props.tld, page]);
 
   useEffect(() => {
-    window.addEventListener("scroll", bottom);
-    return () => window.removeEventListener("scroll", bottom);
-  }, [dates]);
+    const handleScroll = () => {
+      requestAnimationFrame(() => {
+        bottom();
+      });
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [bottom]);
 
   return (
     <div>

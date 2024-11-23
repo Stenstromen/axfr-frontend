@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -26,39 +26,72 @@ function Domains(props) {
   const [pagefull, setPagefull] = useState(false);
   const [domains, setDomains] = useState([]);
   const { darkmode } = useDefaultProvider();
+  const [isLoading, setIsLoading] = useState(false);
 
-  function bottom() {
+  const bottom = useCallback(() => {
+    if (isLoading || pagefull) return;
+
     const scrollTop = document.documentElement.scrollTop;
     const scrollHeight = document.documentElement.scrollHeight;
     const clientHeight = document.documentElement.clientHeight;
-    if (scrollTop + clientHeight >= scrollHeight) {
-      setPage(page + 1);
+    
+    if (scrollTop + clientHeight >= scrollHeight - 800) {
+      setIsLoading(true);
+      setPage(prev => prev + 1);
     }
-  }
+  }, [isLoading, pagefull]);
 
   function scrollToTop() {
     window.scrollTo({
       top: 0,
-      behavior: "auto",
+      behavior: "smooth",
     });
   }
 
   useEffect(() => {
+    setIsLoading(true);
+    axios
+      .get(URL + `/${props.url}/${param}/0`, CONFIG)
+      .then((response) => {
+        if (response.data == null) {
+          setPagefull(true);
+        } else {
+          setDomains(response.data);
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [param, props.url]);
+
+  useEffect(() => {
+    if (page === 0) return;
+
+    setIsLoading(true);
     axios
       .get(URL + `/${props.url}/${param}/${page}`, CONFIG)
       .then((response) => {
         if (response.data == null) {
           setPagefull(true);
-          return;
+        } else {
+          setDomains(prev => [...prev, ...response.data]);
         }
-        return setDomains(domains.concat(response.data));
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
-  }, [props.tld, page]);
+  }, [props.tld, page, param, props.url]);
 
   useEffect(() => {
-    window.addEventListener("scroll", bottom);
-    return () => window.removeEventListener("scroll", bottom);
-  }, [domains]);
+    const handleScroll = () => {
+      requestAnimationFrame(() => {
+        bottom();
+      });
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [bottom]);
 
   return (
     <div>
