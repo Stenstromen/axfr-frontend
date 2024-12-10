@@ -16,6 +16,7 @@ function NavBar() {
     { name: ".SE", path: "/se" },
     { name: ".NU", path: "/nu" },
     { name: "Domain Search", path: "/search" },
+    { name: "First Appearance", path: "/first-appearance" },
     { name: "Domain Stats", path: "/stats" },
   ];
 

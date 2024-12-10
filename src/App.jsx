@@ -11,6 +11,7 @@ const Stats = lazy(() => import('./pages/Stats'));
 const Search = lazy(() => import('./pages/Search'));
 const Dates = lazy(() => import('./pages/Dates'));
 const Domains = lazy(() => import('./pages/Domains'));
+const FirstAppearance = lazy(() => import('./pages/FirstAppearance'));
 
 function Root() {
   return (
@@ -53,6 +54,10 @@ const router = createBrowserRouter([
       {
         path: "stats",
         element: <Stats />,
+      },
+      {
+        path: "first-appearance",
+        element: <FirstAppearance />,
       },
     ],
   },
