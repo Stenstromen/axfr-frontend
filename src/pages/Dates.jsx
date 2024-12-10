@@ -113,7 +113,10 @@ function Dates(props) {
               <Breadcrumb.Item>
                 <Link to={"/"}>Home</Link>
               </Breadcrumb.Item>
-              <Breadcrumb.Item active>
+              <Breadcrumb.Item
+                active
+                style={{ color: darkmode ? "black" : "white" }}
+              >
                 {props.tld.toUpperCase()}
               </Breadcrumb.Item>
             </Breadcrumb>
