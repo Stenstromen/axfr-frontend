@@ -33,6 +33,14 @@ function formatLargeNumber(tickItem) {
   return tickItem;
 }
 
+const COMPARISON_PERIODS = {
+  DAY: { days: 2, label: '1-2d' },
+  WEEK: { days: 7, label: '7d' },
+  MONTH: { days: 31, label: '31d' },
+  ONE_YEAR: { days: 365, label: '1y' },
+  TWO_YEARS: { days: 730, label: '2y' },
+};
+
 function Stats() {
   const { darkmode, isMobile } = useDefaultProvider();
   const URL = import.meta.env.VITE_BACKEND_URL;
@@ -48,6 +56,7 @@ function Stats() {
   const [tld, setTld] = useState("");
   const [stats, setStats] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [comparisonPeriod, setComparisonPeriod] = useState(COMPARISON_PERIODS.MONTH);
 
   useEffect(() => {
     setTld("se");
@@ -63,15 +72,15 @@ function Stats() {
   }, [tld]);
 
   const getTrend = () => {
-    if (stats.length < 31) return null;
+    if (stats.length < comparisonPeriod.days) return null;
     
     const lastMetric = stats[stats.length - 1].amount;
-    const thirtyDaysAgoMetric = stats[stats.length - 31].amount;
-    const difference = lastMetric - thirtyDaysAgoMetric;
+    const previousMetric = stats[stats.length - comparisonPeriod.days].amount;
+    const difference = lastMetric - previousMetric;
     
     if (difference === 0) return null;
     
-    const percentageChange = (Math.abs(difference) / thirtyDaysAgoMetric) * 100;
+    const percentageChange = (Math.abs(difference) / previousMetric) * 100;
     const formattedPercentage = percentageChange < 1 
       ? percentageChange.toFixed(3) 
       : percentageChange.toFixed(1);
@@ -80,8 +89,18 @@ function Stats() {
       direction: difference > 0,
       difference: Math.abs(difference),
       percentage: formattedPercentage,
-      comparedTo: stats[stats.length - 31].date
+      comparedTo: stats[stats.length - comparisonPeriod.days].date
     };
+  };
+
+  const isComparisonPeriodAvailable = (periodDays) => {
+    if (!stats.length) return false;
+    
+    const firstDate = new Date(stats[0].date);
+    const lastDate = new Date(stats[stats.length - 1].date);
+    const daysDifference = Math.ceil((lastDate - firstDate) / (1000 * 60 * 60 * 24));
+    
+    return daysDifference >= periodDays;
   };
 
   return (
@@ -126,6 +145,26 @@ function Stats() {
                   </ToggleButton>
                 );
               })}
+            </ButtonGroup>
+            <ButtonGroup
+              style={{
+                width: "100%",
+                paddingBottom: "10px",
+                marginTop: "10px"
+              }}
+            >
+              {Object.values(COMPARISON_PERIODS).map((period) => (
+                <ToggleButton
+                  key={period.label}
+                  variant="outline-primary"
+                  onClick={() => setComparisonPeriod(period)}
+                  checked={comparisonPeriod.days === period.days}
+                  disabled={!isComparisonPeriodAvailable(period.days)}
+                  type="radio"
+                >
+                  {period.label}
+                </ToggleButton>
+              ))}
             </ButtonGroup>
             <div
               style={{
