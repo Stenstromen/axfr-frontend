@@ -116,7 +116,14 @@ function Stats() {
                 flexDirection: "column",
               }}
             >
-              <h2 style={{ color: darkmode ? "black" : "white" }}>
+              <h2 
+                style={{ 
+                  color: darkmode ? "black" : "white",
+                  fontSize: isMobile ? "1.5rem" : "2rem",
+                  textAlign: "center",
+                  marginBottom: "1rem"
+                }}
+              >
                 Domain Stats
               </h2>
             </div>
@@ -130,27 +137,35 @@ function Stats() {
               style={{
                 width: "100%",
                 paddingBottom: "10px",
+                display: "flex",
+                flexWrap: isMobile ? "wrap" : "nowrap",
+                gap: isMobile ? "5px" : "0",
               }}
             >
-              {tlds.map((item) => {
-                return (
-                  <ToggleButton
-                    key={item}
-                    variant="primary"
-                    onClick={() => setTld(item)}
-                    checked={tld === item}
-                    type="radio"
-                  >
-                    .{item.toUpperCase()}
-                  </ToggleButton>
-                );
-              })}
+              {tlds.map((item) => (
+                <ToggleButton
+                  key={item}
+                  variant="primary"
+                  onClick={() => setTld(item)}
+                  checked={tld === item}
+                  type="radio"
+                  style={{
+                    flex: isMobile ? "1 0 30%" : "1",
+                    fontSize: isMobile ? "0.9rem" : "1rem",
+                  }}
+                >
+                  .{item.toUpperCase()}
+                </ToggleButton>
+              ))}
             </ButtonGroup>
             <ButtonGroup
               style={{
                 width: "100%",
                 paddingBottom: "10px",
-                marginTop: "10px"
+                marginTop: "10px",
+                display: "flex",
+                flexWrap: isMobile ? "wrap" : "nowrap",
+                gap: isMobile ? "5px" : "0",
               }}
             >
               {Object.values(COMPARISON_PERIODS).map((period) => (
@@ -161,6 +176,10 @@ function Stats() {
                   checked={comparisonPeriod.days === period.days}
                   disabled={!isComparisonPeriodAvailable(period.days)}
                   type="radio"
+                  style={{
+                    flex: isMobile ? "1 0 45%" : "1",
+                    fontSize: isMobile ? "0.9rem" : "1rem",
+                  }}
                 >
                   {period.label}
                 </ToggleButton>
@@ -172,6 +191,7 @@ function Stats() {
                 justifyContent: "center",
                 alignItems: "center",
                 flexDirection: "column",
+                padding: isMobile ? "10px 0" : "20px 0",
               }}
             >
               {loading ? (
@@ -179,16 +199,26 @@ function Stats() {
                   <Spinner animation="border" variant="primary" />
                 </h1>
               ) : (
-                <p style={{ color: darkmode ? "black" : "white" }}>
+                <p 
+                  style={{ 
+                    color: darkmode ? "black" : "white",
+                    fontSize: isMobile ? "0.9rem" : "1rem",
+                    textAlign: "center",
+                    margin: isMobile ? "0.5rem 0" : "1rem 0",
+                    wordBreak: "break-word"
+                  }}
+                >
                   Epoch {stats[0]?.date} - Last Metric{" "} 
                   {stats.length > 0 && (
                     <>
-                      {new Intl.NumberFormat("fr-FR").format(stats[stats.length - 1].amount)} -
+                      {new Intl.NumberFormat("fr-FR").format(stats[stats.length - 1].amount)}
                       {getTrend() && (
                         <span
                           style={{
                             color: getTrend().direction ? "#198754" : "#dc3545",
                             marginLeft: "10px",
+                            display: isMobile ? "block" : "inline",
+                            marginTop: isMobile ? "5px" : "0",
                           }}
                         >
                           {getTrend().direction ? (
@@ -208,10 +238,15 @@ function Stats() {
               )}
             </div>
             <AreaChart
-              width={isMobile ? 400 : 880}
-              height={300}
+              width={isMobile ? window.innerWidth - 15 : 880}
+              height={isMobile ? 250 : 300}
               data={stats}
-              margin={{ top: 5, right: 20, bottom: 5, left: 30 }}
+              margin={{ 
+                top: 5, 
+                right: isMobile ? 10 : 20, 
+                bottom: 5, 
+                left: isMobile ? 20 : 30 
+              }}
             >
               <defs>
                 <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">
