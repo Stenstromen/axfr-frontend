@@ -69,7 +69,8 @@ function Home({ tlds }) {
             <Card.Body>
               <Card.Title>📝 Domain First Appearance</Card.Title>
               <Card.Text>
-                .SE/.NU Domains that have appeared for the first time (in my records)
+                .SE/.NU Domains that have appeared for the first time (in my
+                records)
               </Card.Text>
               <Link to={"/first-appearance"}>
                 <Button variant="primary">View First Appearance</Button>
@@ -145,6 +146,22 @@ function Home({ tlds }) {
               </Card.Text>
               <Link to={"/search"}>
                 <Button variant="primary">Search Domains</Button>
+              </Link>
+            </Card.Body>
+          </Card>
+          <Card
+            bg={darkmode ? "light" : "dark"}
+            text={darkmode ? "dark" : "light"}
+            style={{ width: "300px" }}
+          >
+            <Card.Body>
+              <Card.Title>📝 Domain First Appearance</Card.Title>
+              <Card.Text>
+                .SE/.NU Domains that have appeared for the first time (in my
+                records)
+              </Card.Text>
+              <Link to={"/first-appearance"}>
+                <Button variant="primary">View First Appearance</Button>
               </Link>
             </Card.Body>
           </Card>
