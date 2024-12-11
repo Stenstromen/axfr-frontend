@@ -7,6 +7,7 @@ import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import { useDefaultProvider } from "../contexts/default";
 import punycode from 'punycode';
+import { TbSquareArrowUpFilled } from "react-icons/tb";
 
 const URL = import.meta.env.VITE_BACKEND_URL;
 const CONFIG = {
@@ -20,6 +21,7 @@ function SearchResults(props) {
   const [searchResult, setSearchResult] = useState([]);
   const [empty, setEmpty] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   function scrollToTop() {
     window.scrollTo({
@@ -27,6 +29,19 @@ function SearchResults(props) {
       behavior: "auto",
     });
   }
+
+  const toggleVisibility = () => {
+    if (window.scrollY > 300 && searchResult.length >= 30) {
+      setIsVisible(true);
+    } else {
+      setIsVisible(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", toggleVisibility);
+    return () => window.removeEventListener("scroll", toggleVisibility);
+  }, [searchResult.length]);
 
   useEffect(() => {
     setSearchResult([]);
@@ -97,24 +112,33 @@ function SearchResults(props) {
         </Table>
       )}
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "column-reverse",
-        }}
-      >
-        {searchResult.length >= 30 ? (
-          <Button
-            style={{ marginBottom: "20px" }}
-            variant="success"
-            onClick={scrollToTop}
-          >
-            Back to top <AiOutlineArrowUp />
-          </Button>
-        ) : null}
-      </div>
+      {isVisible && (
+        <div
+          onClick={scrollToTop}
+          style={{
+            position: "fixed",
+            right: "25px",
+            bottom: "80px",
+            width: "55px",
+            height: "55px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            cursor: "pointer",
+            zIndex: 1000,
+          }}
+        >
+          <TbSquareArrowUpFilled
+            style={{
+              transitionDuration: "0s",
+              transitionTimingFunction: "revert",
+              transitionDelay: "0s",
+            }}
+            size={55}
+            color="#0d6efd"
+          />
+        </div>
+      )}
     </div>
   );
 }

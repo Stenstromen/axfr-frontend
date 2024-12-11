@@ -12,6 +12,7 @@ import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
 import { useDefaultProvider } from "../contexts/default";
+import { TbSquareArrowUpFilled } from "react-icons/tb";
 
 const URL = import.meta.env.VITE_BACKEND_URL;
 const CONFIG = {
@@ -27,6 +28,7 @@ function Dates(props) {
   const [pagefull, setPagefull] = useState(false);
   const { darkmode } = useDefaultProvider();
   const [isLoading, setIsLoading] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   const bottom = useCallback(() => {
     if (isLoading || pagefull) return;
@@ -47,6 +49,14 @@ function Dates(props) {
       behavior: "smooth",
     });
   }
+
+  const toggleVisibility = () => {
+    if (window.scrollY > 300 && !pagefull) {
+      setIsVisible(true);
+    } else {
+      setIsVisible(false);
+    }
+  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -92,6 +102,11 @@ function Dates(props) {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [bottom]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", toggleVisibility);
+    return () => window.removeEventListener("scroll", toggleVisibility);
+  }, [pagefull]);
 
   return (
     <div>
@@ -174,6 +189,33 @@ function Dates(props) {
                 </Button>
               )}
             </div>
+            {isVisible && (
+              <div
+                onClick={scrollToTop}
+                style={{
+                  position: "fixed",
+                  right: "25px",
+                  bottom: "80px",
+                  width: "55px",
+                  height: "55px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                  zIndex: 1000,
+                }}
+              >
+                <TbSquareArrowUpFilled
+                  style={{
+                    transitionDuration: "0s",
+                    transitionTimingFunction: "revert",
+                    transitionDelay: "0s",
+                  }}
+                  size={55}
+                  color="#0d6efd"
+                />
+              </div>
+            )}
           </Col>
         </Row>
       </Container>

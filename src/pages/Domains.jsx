@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { AiOutlineArrowUp } from "react-icons/ai";
+import { TbSquareArrowUpFilled } from "react-icons/tb";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
@@ -45,6 +46,7 @@ function Domains(props) {
   const [domains, setDomains] = useState([]);
   const { darkmode } = useDefaultProvider();
   const [isLoading, setIsLoading] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   const getUrlPath = () => {
     switch (props.tld) {
@@ -76,6 +78,14 @@ function Domains(props) {
       behavior: "smooth",
     });
   }
+
+  const toggleVisibility = () => {
+    if (window.scrollY > 300 && !pagefull) {
+      setIsVisible(true);
+    } else {
+      setIsVisible(false);
+    }
+  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -121,6 +131,11 @@ function Domains(props) {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [bottom]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", toggleVisibility);
+    return () => window.removeEventListener("scroll", toggleVisibility);
+  }, [pagefull]);
 
   return (
     <div>
@@ -198,6 +213,33 @@ function Domains(props) {
                 </Button>
               )}
             </div>
+            {isVisible && (
+              <div
+                onClick={scrollToTop}
+                style={{
+                  position: "fixed",
+                  right: "25px",
+                  bottom: "80px",
+                  width: "55px",
+                  height: "55px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                  zIndex: 1000,
+                }}
+              >
+                <TbSquareArrowUpFilled
+                  style={{
+                    transitionDuration: "0s",
+                    transitionTimingFunction: "revert",
+                    transitionDelay: "0s",
+                  }}
+                  size={55}
+                  color="#0d6efd"
+                />
+              </div>
+            )}
           </Col>
         </Row>
       </Container>
