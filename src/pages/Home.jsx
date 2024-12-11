@@ -67,6 +67,21 @@ function Home({ tlds }) {
             style={{ width: "300px" }}
           >
             <Card.Body>
+              <Card.Title>📝 Domain First Appearance</Card.Title>
+              <Card.Text>
+                .SE/.NU Domains that have appeared for the first time (in my records)
+              </Card.Text>
+              <Link to={"/first-appearance"}>
+                <Button variant="primary">View First Appearance</Button>
+              </Link>
+            </Card.Body>
+          </Card>
+          <Card
+            bg={darkmode ? "light" : "dark"}
+            text={darkmode ? "dark" : "light"}
+            style={{ width: "300px" }}
+          >
+            <Card.Body>
               <Card.Title>📝 Domain Stats</Card.Title>
               <Card.Text>
                 Domain stats for .SE, .NU, .CH, .LI, .EE, .SK
