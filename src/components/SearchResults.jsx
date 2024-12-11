@@ -97,7 +97,7 @@ function SearchResults(props) {
         <Table striped bordered variant={darkmode ? "light" : "dark"}>
           <thead>
             <tr>
-              <th>Domain</th>
+              <th>Domain ({searchResult.length} found)</th>
             </tr>
           </thead>
           <tbody>
