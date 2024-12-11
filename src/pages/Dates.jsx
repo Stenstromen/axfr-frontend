@@ -26,7 +26,7 @@ function Dates(props) {
   const [page, setPage] = useState(0);
   const [dates, setDates] = useState([]);
   const [pagefull, setPagefull] = useState(false);
-  const { darkmode } = useDefaultProvider();
+  const { darkmode, isMobile } = useDefaultProvider();
   const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -152,7 +152,7 @@ function Dates(props) {
                       <td>
                         <Link to={`/${props.tld}/${item.date}`}>
                           <MdOutlineDns size={30} />
-                          &nbsp;Click to View Domains
+                          &nbsp;{isMobile ? "View" : "Click to View Domains"}
                         </Link>
                       </td>
                     </tr>
