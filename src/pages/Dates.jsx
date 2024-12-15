@@ -13,6 +13,8 @@ import Button from "react-bootstrap/Button";
 import axios from "axios";
 import { useDefaultProvider } from "../contexts/default";
 import { TbSquareArrowUpFilled } from "react-icons/tb";
+import PageHeader from "../components/PageHeader";
+import ScrollToTop from "../components/ScrollToTop";
 
 const URL = import.meta.env.VITE_BACKEND_URL;
 const CONFIG = {
@@ -110,70 +112,49 @@ function Dates(props) {
 
   return (
     <div>
+      <PageHeader
+        title={`New .${props.tld.toUpperCase()} Domains`}
+        breadcrumbs={[
+          { text: "Home", link: "/" },
+          { text: props.tld.toUpperCase(), active: true }
+        ]}
+        darkmode={darkmode}
+      />
+      
       <Container>
         <Row className="justify-content-md-center">
           <Col xl="8" sm>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <h2 style={{ color: darkmode ? "black" : "white" }}>
-                New .{props.tld.toUpperCase()} Domains
-              </h2>
+            <div className="table-container">
+              <Table striped bordered variant={darkmode ? "light" : "dark"}>
+                <thead>
+                  <tr>
+                    <th>Domain Name</th>
+                    <th>Domain Amount</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {dates.map((item) => {
+                    return (
+                      <tr key={item.date}>
+                        <td key={item.date}>{item.date}</td>
+                        <td key={item.amount}>{item.amount}</td>
+                        <td>
+                          <Link to={`/${props.tld}/${item.date}`}>
+                            <MdOutlineDns size={30} />
+                            &nbsp;{isMobile ? "View" : "Click to View Domains"}
+                          </Link>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </Table>
             </div>
-            <Breadcrumb>
-              <Breadcrumb.Item>
-                <Link to={"/"}>Home</Link>
-              </Breadcrumb.Item>
-              <Breadcrumb.Item
-                active
-                style={{ color: darkmode ? "black" : "white" }}
-              >
-                {props.tld.toUpperCase()}
-              </Breadcrumb.Item>
-            </Breadcrumb>
-            <Table striped bordered variant={darkmode ? "light" : "dark"}>
-              <thead>
-                <tr>
-                  <th>Domain Name</th>
-                  <th>Domain Amount</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {dates.map((item) => {
-                  return (
-                    <tr key={item.date}>
-                      <td key={item.date}>{item.date}</td>
-                      <td key={item.amount}>{item.amount}</td>
-                      <td>
-                        <Link to={`/${props.tld}/${item.date}`}>
-                          <MdOutlineDns size={30} />
-                          &nbsp;{isMobile ? "View" : "Click to View Domains"}
-                        </Link>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </Table>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                flexDirection: "column-reverse",
-              }}
-            >
+            
+            <div className="page-controls">
               {pagefull ? (
-                <Button
-                  style={{ marginBottom: "20px" }}
-                  variant="success"
-                  onClick={scrollToTop}
-                >
+                <Button variant="success" onClick={scrollToTop}>
                   Back to top <AiOutlineArrowUp />
                 </Button>
               ) : (
@@ -189,33 +170,8 @@ function Dates(props) {
                 </Button>
               )}
             </div>
-            {isVisible && (
-              <div
-                onClick={scrollToTop}
-                style={{
-                  position: "fixed",
-                  right: "25px",
-                  bottom: "80px",
-                  width: "55px",
-                  height: "55px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  cursor: "pointer",
-                  zIndex: 1000,
-                }}
-              >
-                <TbSquareArrowUpFilled
-                  style={{
-                    transitionDuration: "0s",
-                    transitionTimingFunction: "revert",
-                    transitionDelay: "0s",
-                  }}
-                  size={55}
-                  color="#0d6efd"
-                />
-              </div>
-            )}
+            
+            <ScrollToTop isVisible={isVisible} onClick={scrollToTop} />
           </Col>
         </Row>
       </Container>
