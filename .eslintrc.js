@@ -3,7 +3,7 @@ module.exports = {
     browser: true,
     node: true,
     es2021: true,
-    jest: true
+    jest: true,
   },
   extends: ["eslint:recommended", "plugin:react/recommended"],
   parserOptions: {
@@ -11,5 +11,8 @@ module.exports = {
     sourceType: "module",
   },
   plugins: ["react"],
-  rules: {},
+  rules: {
+    "no-undef": "error",
+    "no-undefined": "error",
+  },
 };

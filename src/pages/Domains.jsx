@@ -1,19 +1,18 @@
 import React, { useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
 import { AiOutlineArrowUp } from "react-icons/ai";
-import { TbSquareArrowUpFilled } from "react-icons/tb";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
-import Breadcrumb from "react-bootstrap/Breadcrumb";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Spinner from "react-bootstrap/Spinner";
 import axios from "axios";
 import { useDefaultProvider } from "../contexts/default";
 import punycode from 'punycode';
+import PageHeader from "../components/PageHeader";
+import ScrollToTop from "../components/ScrollToTop";
 
 const URL = import.meta.env.VITE_BACKEND_URL;
 const CONFIG = {
@@ -139,65 +138,39 @@ function Domains(props) {
 
   return (
     <div>
+      <PageHeader
+        title={`.${props.tld.toUpperCase()} Domains for ${param.replace(/(\d{4})(\d{2})(\d{2})/g, "$1-$2-$3")}`}
+        breadcrumbs={[
+          { text: "Home", link: "/" },
+          { text: props.tld.toUpperCase(), link: `/${props.tld}` },
+          { text: param, active: true }
+        ]}
+        darkmode={darkmode}
+      />
+      
       <Container>
         <Row className="justify-content-md-center">
           <Col xl="8" sm>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <h2 style={{ color: darkmode ? "black" : "white" }}>
-                .{props.tld.toUpperCase()} Domains for{" "}
-                {param.replace(/(\d{4})(\d{2})(\d{2})/g, "$1-$2-$3")}
-              </h2>
-            </div>
-            <Breadcrumb>
-              <Breadcrumb.Item>
-                <Link to={"/"}>Home</Link>
-              </Breadcrumb.Item>
-              <Breadcrumb.Item>
-                <Link to={`/${props.tld}`}>{props.tld.toUpperCase()}</Link>
-              </Breadcrumb.Item>
-              <Breadcrumb.Item 
-                active 
-                style={{ color: darkmode ? "black" : "white" }}
-              >
-                {param}
-              </Breadcrumb.Item>
-            </Breadcrumb>
-            <Table striped bordered variant={darkmode ? "light" : "dark"}>
-              <thead>
-                <tr>
-                  <th>Domain Name</th>
-                </tr>
-              </thead>
-              <tbody>
-                {domains.map((item) => {
-                  return (
+            <div className="table-container">
+              <Table striped bordered variant={darkmode ? "light" : "dark"}>
+                <thead>
+                  <tr>
+                    <th>Domain Name</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {domains.map((item) => (
                     <tr key={item.domain}>
-                      <td key={item.domain}>{formatDomain(item.domain, darkmode)}</td>
+                      <td>{formatDomain(item.domain, darkmode)}</td>
                     </tr>
-                  );
-                })}
-              </tbody>
-            </Table>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                flexDirection: "column-reverse",
-              }}
-            >
+                  ))}
+                </tbody>
+              </Table>
+            </div>
+            
+            <div className="page-controls">
               {pagefull ? (
-                <Button
-                  style={{ marginBottom: "20px" }}
-                  variant="success"
-                  onClick={scrollToTop}
-                >
+                <Button variant="success" onClick={scrollToTop}>
                   Back to top <AiOutlineArrowUp />
                 </Button>
               ) : (
@@ -213,33 +186,8 @@ function Domains(props) {
                 </Button>
               )}
             </div>
-            {isVisible && (
-              <div
-                onClick={scrollToTop}
-                style={{
-                  position: "fixed",
-                  right: "25px",
-                  bottom: "80px",
-                  width: "55px",
-                  height: "55px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  cursor: "pointer",
-                  zIndex: 1000,
-                }}
-              >
-                <TbSquareArrowUpFilled
-                  style={{
-                    transitionDuration: "0s",
-                    transitionTimingFunction: "revert",
-                    transitionDelay: "0s",
-                  }}
-                  size={55}
-                  color="#0d6efd"
-                />
-              </div>
-            )}
+            
+            <ScrollToTop isVisible={isVisible} onClick={scrollToTop} />
           </Col>
         </Row>
       </Container>
