@@ -79,7 +79,7 @@ function Domains(props) {
   }
 
   const toggleVisibility = () => {
-    if (window.scrollY > 300 && !pagefull) {
+    if (window.scrollY > 300) {
       setIsVisible(true);
     } else {
       setIsVisible(false);
@@ -134,7 +134,7 @@ function Domains(props) {
   useEffect(() => {
     window.addEventListener("scroll", toggleVisibility);
     return () => window.removeEventListener("scroll", toggleVisibility);
-  }, [pagefull]);
+  }, []);
 
   return (
     <div>
