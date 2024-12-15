@@ -7,24 +7,58 @@ import Col from "react-bootstrap/Col";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import Stack from "react-bootstrap/Stack";
-
 import { useDefaultProvider } from "../contexts/default";
 
 function Home({ tlds }) {
-  const { isMobile, darkmode } = useDefaultProvider();
+  const { darkmode } = useDefaultProvider();
+
+  const cards = [
+    {
+      title: "Domain Search",
+      text: (
+        <>
+          Search&nbsp;
+          {tlds.map((item) => (
+            <React.Fragment key={item}>.{item.toUpperCase()}&nbsp;</React.Fragment>
+          ))}
+          Domains
+        </>
+      ),
+      link: "/search",
+      buttonText: "Search Domains",
+    },
+    {
+      title: "Domain First Appearance",
+      text: ".SE/.NU Domains that have appeared for the first time (in my records)",
+      link: "/first-appearance",
+      buttonText: "View First Appearance",
+    },
+    {
+      title: "Domain Stats",
+      text: "Domain stats for .SE, .NU, .CH, .LI, .EE, .SK",
+      link: "/stats",
+      buttonText: "View Domain Stats",
+    },
+    {
+      title: "Fresh .SE Domains",
+      text: "Newly Added And Updated .SE Domains, Added Yesterday",
+      link: "/se",
+      buttonText: "View .SE Domains",
+    },
+    {
+      title: "Fresh .NU Domains",
+      text: "Newly Added And Updated .NU Domains, Added Yesterday",
+      link: "/nu",
+      buttonText: "View .NU Domains",
+    },
+  ];
+
   return (
     <div>
       <Container>
         <Row className="justify-content-md-center">
           <Col xl="8" sm>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
+            <div className="text-center my-4">
               <h2 style={{ color: darkmode ? "black" : "white" }}>
                 New .SE/.NU Domains
               </h2>
@@ -34,184 +68,25 @@ function Home({ tlds }) {
             </Breadcrumb>
           </Col>
         </Row>
+        <div className="card-grid">
+          {cards.map((card, index) => (
+            <Card
+              key={index}
+              bg={darkmode ? "light" : "dark"}
+              text={darkmode ? "dark" : "light"}
+              className="card-item"
+            >
+              <Card.Body>
+                <Card.Title>📝 {card.title}</Card.Title>
+                <Card.Text>{card.text}</Card.Text>
+                <Link to={card.link}>
+                  <Button variant="primary">{card.buttonText}</Button>
+                </Link>
+              </Card.Body>
+            </Card>
+          ))}
+        </div>
       </Container>
-      {isMobile ? (
-        <Stack
-          style={{ width: "350px", paddingTop: "50px" }}
-          gap={3}
-          direction="vertical"
-          className="col-md-5 mx-auto"
-        >
-          <Card
-            bg={darkmode ? "light" : "dark"}
-            text={darkmode ? "dark" : "light"}
-            style={{ width: "300px" }}
-          >
-            <Card.Body>
-              <Card.Title>📝 Domain Search</Card.Title>
-              <Card.Text>
-                Search&nbsp;
-                {tlds.map((item) => {
-                  return <>.{item.toUpperCase()}&nbsp;</>;
-                })}
-                Domains
-              </Card.Text>
-              <Link to={"/search"}>
-                <Button variant="primary">Search Domains</Button>
-              </Link>
-            </Card.Body>
-          </Card>
-          <Card
-            bg={darkmode ? "light" : "dark"}
-            text={darkmode ? "dark" : "light"}
-            style={{ width: "300px" }}
-          >
-            <Card.Body>
-              <Card.Title>📝 Domain First Appearance</Card.Title>
-              <Card.Text>
-                .SE/.NU Domains that have appeared for the first time (in my
-                records)
-              </Card.Text>
-              <Link to={"/first-appearance"}>
-                <Button variant="primary">View First Appearance</Button>
-              </Link>
-            </Card.Body>
-          </Card>
-          <Card
-            bg={darkmode ? "light" : "dark"}
-            text={darkmode ? "dark" : "light"}
-            style={{ width: "300px" }}
-          >
-            <Card.Body>
-              <Card.Title>📝 Domain Stats</Card.Title>
-              <Card.Text>
-                Domain stats for .SE, .NU, .CH, .LI, .EE, .SK
-              </Card.Text>
-              <Link to={"/stats"}>
-                <Button variant="primary">View Domain Stats</Button>
-              </Link>
-            </Card.Body>
-          </Card>
-          <Card
-            bg={darkmode ? "light" : "dark"}
-            text={darkmode ? "dark" : "light"}
-            style={{ width: "300px" }}
-          >
-            <Card.Body>
-              <Card.Title>📝 Fresh .SE Domains</Card.Title>
-              <Card.Text>
-                Newly Added And Updated .SE Domains, Added Yesterday
-              </Card.Text>
-              <Link to={"/se"}>
-                <Button variant="primary">View .SE Domains</Button>
-              </Link>
-            </Card.Body>
-          </Card>
-          <Card
-            bg={darkmode ? "light" : "dark"}
-            text={darkmode ? "dark" : "light"}
-            style={{ width: "300px" }}
-          >
-            <Card.Body>
-              <Card.Title>📝 Fresh .NU Domains</Card.Title>
-              <Card.Text>
-                Newly Added And Updated .NU Domains, Added Yesterday
-              </Card.Text>
-              <Link to={"/nu"}>
-                <Button variant="primary">View .NU Domains</Button>
-              </Link>
-            </Card.Body>
-          </Card>
-        </Stack>
-      ) : (
-        <Stack
-          style={{ width: "80%", paddingTop: "100px" }}
-          gap={3}
-          direction="horizontal"
-          className="col-md-5 mx-auto"
-        >
-          <Card
-            bg={darkmode ? "light" : "dark"}
-            text={darkmode ? "dark" : "light"}
-            style={{ width: "32rem", height: "200px" }}
-          >
-            <Card.Body>
-              <Card.Title>📝 Domain Search</Card.Title>
-              <Card.Text>
-                Search&nbsp;
-                {tlds.map((item) => {
-                  return <>.{item.toUpperCase()}&nbsp;</>;
-                })}
-                Domains
-              </Card.Text>
-              <Link to={"/search"}>
-                <Button variant="primary">Search Domains</Button>
-              </Link>
-            </Card.Body>
-          </Card>
-          <Card
-            bg={darkmode ? "light" : "dark"}
-            text={darkmode ? "dark" : "light"}
-            style={{ width: "300px" }}
-          >
-            <Card.Body>
-              <Card.Title>📝 Domain First Appearance</Card.Title>
-              <Card.Text>
-                .SE/.NU Domains that have appeared for the first time (in my
-                records)
-              </Card.Text>
-              <Link to={"/first-appearance"}>
-                <Button variant="primary">View First Appearance</Button>
-              </Link>
-            </Card.Body>
-          </Card>
-          <Card
-            bg={darkmode ? "light" : "dark"}
-            text={darkmode ? "dark" : "light"}
-            style={{ width: "32rem", height: "200px" }}
-          >
-            <Card.Body>
-              <Card.Title>📝 Domain Stats</Card.Title>
-              <Card.Text>
-                Domain stats for .SE, .NU, .CH, .LI, .EE, .SK
-              </Card.Text>
-              <Link to={"/stats"}>
-                <Button variant="primary">View Domain Stats</Button>
-              </Link>
-            </Card.Body>
-          </Card>
-          <Card
-            bg={darkmode ? "light" : "dark"}
-            text={darkmode ? "dark" : "light"}
-            style={{ width: "32rem", height: "200px" }}
-          >
-            <Card.Body>
-              <Card.Title>📝 Fresh .SE Domains</Card.Title>
-              <Card.Text>
-                Newly Added And Updated .SE Domains, Added Yesterday
-              </Card.Text>
-              <Link to={"/se"}>
-                <Button variant="primary">View .SE Domains</Button>
-              </Link>
-            </Card.Body>
-          </Card>
-          <Card
-            bg={darkmode ? "light" : "dark"}
-            text={darkmode ? "dark" : "light"}
-            style={{ width: "32rem", height: "200px" }}
-          >
-            <Card.Body>
-              <Card.Title>📝 Fresh .NU Domains</Card.Title>
-              <Card.Text>
-                Newly Added And Updated .NU Domains, Added Yesterday
-              </Card.Text>
-              <Link to={"/nu"}>
-                <Button variant="primary">View .NU Domains</Button>
-              </Link>
-            </Card.Body>
-          </Card>
-        </Stack>
-      )}
     </div>
   );
 }
