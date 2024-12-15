@@ -1,12 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Breadcrumb from "react-bootstrap/Breadcrumb";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
+import PageHeader from "../components/PageHeader";
 import { useDefaultProvider } from "../contexts/default";
 
 function Home({ tlds }) {
@@ -19,7 +19,9 @@ function Home({ tlds }) {
         <>
           Search&nbsp;
           {tlds.map((item) => (
-            <React.Fragment key={item}>.{item.toUpperCase()}&nbsp;</React.Fragment>
+            <React.Fragment key={item}>
+              .{item.toUpperCase()}&nbsp;
+            </React.Fragment>
           ))}
           Domains
         </>
@@ -58,14 +60,11 @@ function Home({ tlds }) {
       <Container>
         <Row className="justify-content-md-center">
           <Col xl="8" sm>
-            <div className="text-center my-4">
-              <h2 style={{ color: darkmode ? "black" : "white" }}>
-                New .SE/.NU Domains
-              </h2>
-            </div>
-            <Breadcrumb>
-              <Breadcrumb.Item active>Home</Breadcrumb.Item>
-            </Breadcrumb>
+            <PageHeader
+              title={`New .SE/.NU Domains`}
+              breadcrumbs={[{ text: "Home", link: "/" }]}
+              darkmode={darkmode}
+            />
           </Col>
         </Row>
         <div className="card-grid">

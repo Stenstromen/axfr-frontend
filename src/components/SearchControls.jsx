@@ -55,6 +55,7 @@ function SearchControls({
             title={tld ? "." + tld.toUpperCase() : "TLD"}
             id="input-group-dropdown-2"
             align="end"
+            menuVariant={darkmode ? "light" : "dark"}
           >
             {tlds.map((item) => (
               <Dropdown.Item
