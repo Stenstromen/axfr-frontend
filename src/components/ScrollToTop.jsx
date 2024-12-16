@@ -9,6 +9,7 @@ function ScrollToTop({ isVisible, onClick }) {
     <div
       onClick={onClick}
       className="scroll-to-top"
+      data-testid="scroll-to-top-button"
     >
       <TbSquareArrowUpFilled size={55} color="#0d6efd" />
     </div>
