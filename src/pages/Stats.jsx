@@ -71,12 +71,14 @@ function Stats() {
   }, []);
 
   useEffect(() => {
-    setLoading(true);
-    axios.get(`${URL}/stats/${tld}`, CONFIG).then((response) => {
-      const filteredStats = response.data.filter((stat) => stat.amount > 0);
-      setStats(filteredStats);
-      setLoading(false);
-    });
+    if (tld) {
+      setLoading(true);
+      axios.get(`${URL}/stats/${tld}`, CONFIG).then((response) => {
+        const filteredStats = response.data.filter((stat) => stat.amount > 0);
+        setStats(filteredStats);
+        setLoading(false);
+      });
+    }
   }, [tld]);
 
   const getTrend = () => {
