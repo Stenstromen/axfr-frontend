@@ -46,6 +46,7 @@ function Domains(props) {
   const { darkmode } = useDefaultProvider();
   const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [lastLoadTime, setLastLoadTime] = useState(0);
 
   const getUrlPath = () => {
     switch (props.tld) {
@@ -61,6 +62,10 @@ function Domains(props) {
   const bottom = useCallback(() => {
     if (isLoading || pagefull) return;
 
+    // Prevent immediate triggering after data load
+    const now = Date.now();
+    if (now - lastLoadTime < 100) return;
+
     const scrollTop = document.documentElement.scrollTop;
     const scrollHeight = document.documentElement.scrollHeight;
     const clientHeight = document.documentElement.clientHeight;
@@ -69,7 +74,7 @@ function Domains(props) {
       setIsLoading(true);
       setPage(prev => prev + 1);
     }
-  }, [isLoading, pagefull]);
+  }, [isLoading, pagefull, lastLoadTime]);
 
   function scrollToTop() {
     window.scrollTo({
@@ -117,6 +122,7 @@ function Domains(props) {
       })
       .finally(() => {
         setIsLoading(false);
+        setLastLoadTime(Date.now());
       });
   }, [props.tld, page, param]);
 

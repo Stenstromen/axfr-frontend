@@ -31,9 +31,13 @@ function Dates(props) {
   const { darkmode, isMobile } = useDefaultProvider();
   const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [lastLoadTime, setLastLoadTime] = useState(0);
 
   const bottom = useCallback(() => {
     if (isLoading || pagefull) return;
+
+    const now = Date.now();
+    if (now - lastLoadTime < 100) return;
 
     const scrollTop = document.documentElement.scrollTop;
     const scrollHeight = document.documentElement.scrollHeight;
@@ -43,7 +47,7 @@ function Dates(props) {
       setIsLoading(true);
       setPage((prev) => prev + 1);
     }
-  }, [isLoading, pagefull]);
+  }, [isLoading, pagefull, lastLoadTime]);
 
   function scrollToTop() {
     window.scrollTo({
@@ -91,6 +95,7 @@ function Dates(props) {
       })
       .finally(() => {
         setIsLoading(false);
+        setLastLoadTime(Date.now());
       });
   }, [props.tld, page]);
 
