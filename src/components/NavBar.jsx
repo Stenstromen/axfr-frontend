@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDefaultProvider } from "../contexts/default";
 import { Container, Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { Helmet } from "react-helmet";
 import { MdOutlineLightMode, MdOutlineDarkMode } from "react-icons/md";
 import { Nav } from "react-bootstrap";
 import MobileNavbar from "./MobileNavbar";
@@ -19,11 +18,21 @@ function NavBar() {
     { name: "Domain Stats", path: "/stats" },
   ];
 
+  useEffect(() => {
+    const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+    if (themeColorMeta) {
+      themeColorMeta.setAttribute('content', darkmode ? "#0d6efd" : "#212529");
+    } else {
+      // Create the meta tag if it doesn't exist
+      const meta = document.createElement('meta');
+      meta.name = 'theme-color';
+      meta.content = darkmode ? "#0d6efd" : "#212529";
+      document.head.appendChild(meta);
+    }
+  }, [darkmode]);
+
   return (
     <div style={{ position: "sticky", top: 0, zIndex: 1020 }}>
-      <Helmet>
-        <meta name="theme-color" content={darkmode ? "#0d6efd" : "#212529"} />
-      </Helmet>
       <Navbar
         bg={darkmode ? "primary" : "dark"}
         variant={darkmode ? "light" : "dark"}
