@@ -6,12 +6,8 @@ vi.mock('react-router-dom', async () => {
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
-import axios from "axios";
 import { DefaultProvider } from "../../contexts/default";
 import Search from "../Search";
-
-// Mock axios
-vi.mock("axios");
 
 // Mock PageHeader component
 vi.mock("../../components/PageHeader", () => ({
@@ -53,10 +49,12 @@ describe("Search Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     
-    // Setup axios mock for search
-    axios.get.mockImplementation((url) => {
+    // Setup fetch mock for search
+    global.fetch = vi.fn((url) => {
       if (url.includes('/search/se/coolcat')) {
-        return Promise.resolve({ data: mockSearchResults });
+        return Promise.resolve({
+          json: () => Promise.resolve(mockSearchResults),
+        });
       }
       return Promise.reject(new Error('Invalid URL'));
     });
@@ -91,7 +89,11 @@ describe("Search Component", () => {
 
   it("shows no results message when search returns empty", async () => {
     // Mock empty search results
-    axios.get.mockImplementationOnce(() => Promise.resolve({ data: [] }));
+    global.fetch = vi.fn(() =>
+      Promise.resolve({
+        json: () => Promise.resolve([]),
+      })
+    );
 
     renderWithRouter(<Search tlds={["se", "nu"]} />);
 

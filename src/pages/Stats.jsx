@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import {
   AreaChart,
   Area,
@@ -17,17 +16,17 @@ import Breadcrumb from "react-bootstrap/Breadcrumb";
 import Spinner from "react-bootstrap/Spinner";
 import { Link } from "react-router-dom";
 import { useDefaultProvider } from "../contexts/default";
-import { AiOutlineArrowUp, AiOutlineArrowDown } from 'react-icons/ai';
+import { AiOutlineArrowUp, AiOutlineArrowDown } from "react-icons/ai";
 
 function formatDate(tickItem, period) {
   const date = new Date(tickItem);
-  
-  if (period.days === '*' || period.days >= 365) {
-    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+
+  if (period.days === "*" || period.days >= 365) {
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
   } else if (period.days >= 31) {
-    return `${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    return `${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
   } else {
-    return `${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+    return `${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")} ${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
   }
 }
 
@@ -41,12 +40,12 @@ function formatLargeNumber(tickItem) {
 }
 
 const COMPARISON_PERIODS = {
-  ALL_TIME: { days: '*', label: 'All' },
-  DAY: { days: 2, label: '1-2d' },
-  WEEK: { days: 7, label: '7d' },
-  MONTH: { days: 31, label: '31d' },
-  ONE_YEAR: { days: 365, label: '1y' },
-  TWO_YEARS: { days: 730, label: '2y' },
+  ALL_TIME: { days: "*", label: "All" },
+  DAY: { days: 2, label: "1-2d" },
+  WEEK: { days: 7, label: "7d" },
+  MONTH: { days: 31, label: "31d" },
+  ONE_YEAR: { days: 365, label: "1y" },
+  TWO_YEARS: { days: 730, label: "2y" },
 };
 
 function Stats() {
@@ -64,7 +63,9 @@ function Stats() {
   const [tld, setTld] = useState("");
   const [stats, setStats] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [comparisonPeriod, setComparisonPeriod] = useState(COMPARISON_PERIODS.ALL_TIME);
+  const [comparisonPeriod, setComparisonPeriod] = useState(
+    COMPARISON_PERIODS.ALL_TIME,
+  );
 
   useEffect(() => {
     setTld("se");
@@ -73,51 +74,59 @@ function Stats() {
   useEffect(() => {
     if (tld) {
       setLoading(true);
-      axios.get(`${URL}/stats/${tld}`, CONFIG).then((response) => {
-        const filteredStats = response.data.filter((stat) => stat.amount > 0);
-        setStats(filteredStats);
-        setLoading(false);
+      fetch(`${URL}/stats/${tld}`, CONFIG).then((response) => {
+        response.json().then((data) => {
+          const filteredStats = data.filter((stat) => stat.amount > 0);
+          setStats(filteredStats);
+          setLoading(false);
+        });
       });
     }
   }, [tld]);
 
   const getTrend = () => {
     if (stats.length < 2) return null;
-    
+
     const lastMetric = stats[stats.length - 1].amount;
-    const previousIndex = comparisonPeriod.days === '*' ? 0 : Math.max(stats.length - comparisonPeriod.days, 0);
+    const previousIndex =
+      comparisonPeriod.days === "*"
+        ? 0
+        : Math.max(stats.length - comparisonPeriod.days, 0);
     const previousMetric = stats[previousIndex].amount;
     const difference = lastMetric - previousMetric;
-    
+
     if (difference === 0) return null;
-    
+
     const percentageChange = (Math.abs(difference) / previousMetric) * 100;
-    const formattedPercentage = percentageChange < 1 
-      ? percentageChange.toFixed(3) 
-      : percentageChange.toFixed(1);
-    
+    const formattedPercentage =
+      percentageChange < 1
+        ? percentageChange.toFixed(3)
+        : percentageChange.toFixed(1);
+
     return {
       direction: difference > 0,
       difference: Math.abs(difference),
       percentage: formattedPercentage,
-      comparedTo: stats[previousIndex].date
+      comparedTo: stats[previousIndex].date,
     };
   };
 
   const isComparisonPeriodAvailable = (periodDays) => {
     if (!stats.length) return false;
-    if (periodDays === '*') return true;
-    
+    if (periodDays === "*") return true;
+
     const firstDate = new Date(stats[0].date);
     const lastDate = new Date(stats[stats.length - 1].date);
-    const daysDifference = Math.ceil((lastDate - firstDate) / (1000 * 60 * 60 * 24));
-    
+    const daysDifference = Math.ceil(
+      (lastDate - firstDate) / (1000 * 60 * 60 * 24),
+    );
+
     return daysDifference >= periodDays;
   };
 
   const getFilteredStats = () => {
-    if (comparisonPeriod.days === '*' || !stats.length) return stats;
-    
+    if (comparisonPeriod.days === "*" || !stats.length) return stats;
+
     const startIndex = Math.max(stats.length - comparisonPeriod.days, 0);
     return stats.slice(startIndex);
   };
@@ -135,12 +144,12 @@ function Stats() {
                 flexDirection: "column",
               }}
             >
-              <h2 
-                style={{ 
+              <h2
+                style={{
                   color: darkmode ? "black" : "white",
                   fontSize: isMobile ? "1.5rem" : "2rem",
                   textAlign: "center",
-                  marginBottom: "1rem"
+                  marginBottom: "1rem",
                 }}
               >
                 Domain Stats
@@ -218,19 +227,21 @@ function Stats() {
                   <Spinner animation="border" variant="primary" />
                 </h1>
               ) : (
-                <p 
-                  style={{ 
+                <p
+                  style={{
                     color: darkmode ? "black" : "white",
                     fontSize: isMobile ? "0.9rem" : "1rem",
                     textAlign: "center",
                     margin: isMobile ? "0.5rem 0" : "1rem 0",
-                    wordBreak: "break-word"
+                    wordBreak: "break-word",
                   }}
                 >
-                  Epoch {stats[0]?.date} - Last Metric{" "} 
+                  Epoch {stats[0]?.date} - Last Metric{" "}
                   {stats.length > 0 && (
                     <>
-                      {new Intl.NumberFormat("fr-FR").format(stats[stats.length - 1].amount)}
+                      {new Intl.NumberFormat("fr-FR").format(
+                        stats[stats.length - 1].amount,
+                      )}
                       {getTrend() && (
                         <span
                           style={{
@@ -244,10 +255,10 @@ function Stats() {
                             <AiOutlineArrowUp />
                           ) : (
                             <AiOutlineArrowDown />
-                          )}
-                          {" "}
-                          {new Intl.NumberFormat("fr-FR").format(getTrend().difference)}
-                          {" "}
+                          )}{" "}
+                          {new Intl.NumberFormat("fr-FR").format(
+                            getTrend().difference,
+                          )}{" "}
                           ({getTrend().percentage}%) vs {getTrend().comparedTo}
                         </span>
                       )}
@@ -260,11 +271,11 @@ function Stats() {
               width={isMobile ? window.innerWidth - 15 : 880}
               height={isMobile ? 250 : 300}
               data={getFilteredStats()}
-              margin={{ 
-                top: 5, 
-                right: isMobile ? 10 : 20, 
-                bottom: 20, 
-                left: isMobile ? 20 : 30 
+              margin={{
+                top: 5,
+                right: isMobile ? 10 : 20,
+                bottom: 20,
+                left: isMobile ? 20 : 30,
               }}
             >
               <defs>
@@ -282,10 +293,10 @@ function Stats() {
                 connectNulls={true}
               />
               <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-              <XAxis 
-                dataKey="date" 
+              <XAxis
+                dataKey="date"
                 tickFormatter={(value) => formatDate(value, comparisonPeriod)}
-                interval={comparisonPeriod.days === 2 ? 0 : 'preserveStartEnd'}
+                interval={comparisonPeriod.days === 2 ? 0 : "preserveStartEnd"}
                 angle={-45}
                 textAnchor="end"
                 height={60}

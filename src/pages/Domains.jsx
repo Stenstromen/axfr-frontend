@@ -8,9 +8,8 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Spinner from "react-bootstrap/Spinner";
-import axios from "axios";
 import { useDefaultProvider } from "../contexts/default";
-import punycode from 'punycode';
+import punycode from "punycode";
 import PageHeader from "../components/PageHeader";
 import ScrollToTop from "../components/ScrollToTop";
 
@@ -27,7 +26,10 @@ const formatDomain = (domain, darkmode) => {
     if (decoded !== domain) {
       return (
         <span>
-          {decoded} <span style={{ color: darkmode ? "#6c757d" : "#adb5bd" }}>({domain})</span>
+          {decoded}{" "}
+          <span style={{ color: darkmode ? "#6c757d" : "#adb5bd" }}>
+            ({domain})
+          </span>
         </span>
       );
     }
@@ -50,10 +52,10 @@ function Domains(props) {
 
   const getUrlPath = () => {
     switch (props.tld) {
-      case 'se':
-        return 'sedomains';
-      case 'nu':
-        return 'nudomains';
+      case "se":
+        return "sedomains";
+      case "nu":
+        return "nudomains";
       default:
         return props.url;
     }
@@ -69,10 +71,10 @@ function Domains(props) {
     const scrollTop = document.documentElement.scrollTop;
     const scrollHeight = document.documentElement.scrollHeight;
     const clientHeight = document.documentElement.clientHeight;
-    
+
     if (scrollTop + clientHeight >= scrollHeight - 800) {
       setIsLoading(true);
-      setPage(prev => prev + 1);
+      setPage((prev) => prev + 1);
     }
   }, [isLoading, pagefull, lastLoadTime]);
 
@@ -93,37 +95,45 @@ function Domains(props) {
 
   useEffect(() => {
     setIsLoading(true);
-    axios
-      .get(URL + `/${getUrlPath()}/${param}/0`, CONFIG)
-      .then((response) => {
-        if (response.data == null) {
-          setPagefull(true);
-        } else {
-          setDomains(response.data);
-        }
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+
+    fetch(`${URL}/${getUrlPath()}/${param}/0`, CONFIG).then((response) => {
+      response
+        .json()
+        .then((data) => {
+          if (data == null) {
+            setPagefull(true);
+          } else {
+            setDomains(data);
+          }
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    });
   }, [param, props.tld]);
 
   useEffect(() => {
     if (page === 0) return;
 
     setIsLoading(true);
-    axios
-      .get(URL + `/${getUrlPath()}/${param}/${page}`, CONFIG)
-      .then((response) => {
-        if (response.data == null) {
-          setPagefull(true);
-        } else {
-          setDomains(prev => [...prev, ...response.data]);
-        }
-      })
-      .finally(() => {
-        setIsLoading(false);
-        setLastLoadTime(Date.now());
-      });
+
+    fetch(`${URL}/${getUrlPath()}/${param}/${page}`, CONFIG).then(
+      (response) => {
+        response
+          .json()
+          .then((data) => {
+            if (data == null) {
+              setPagefull(true);
+            } else {
+              setDomains((prev) => [...prev, ...data]);
+            }
+          })
+          .finally(() => {
+            setIsLoading(false);
+            setLastLoadTime(Date.now());
+          });
+      },
+    );
   }, [props.tld, page, param]);
 
   useEffect(() => {
@@ -149,11 +159,11 @@ function Domains(props) {
         breadcrumbs={[
           { text: "Home", link: "/" },
           { text: props.tld.toUpperCase(), link: `/${props.tld}` },
-          { text: param, active: true }
+          { text: param, active: true },
         ]}
         darkmode={darkmode}
       />
-      
+
       <Container>
         <Row className="justify-content-md-center">
           <Col xl="8" sm>
@@ -173,7 +183,7 @@ function Domains(props) {
                 </tbody>
               </Table>
             </div>
-            
+
             <div className="page-controls">
               {pagefull ? (
                 <Button variant="success" onClick={scrollToTop}>
@@ -192,7 +202,7 @@ function Domains(props) {
                 </Button>
               )}
             </div>
-            
+
             <ScrollToTop isVisible={isVisible} onClick={scrollToTop} />
           </Col>
         </Row>

@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import Table from 'react-bootstrap/Table';
-import Spinner from 'react-bootstrap/Spinner';
-import ScrollToTop from './ScrollToTop';
-import punycode from 'punycode';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
+import Table from "react-bootstrap/Table";
+import Spinner from "react-bootstrap/Spinner";
+import ScrollToTop from "./ScrollToTop";
+import punycode from "punycode";
 
 const URL = import.meta.env.VITE_BACKEND_URL;
 const CONFIG = {
@@ -45,25 +44,22 @@ function SearchResults({ tld, query, darkmode }) {
     if (query.length >= 3) {
       setLoading(true);
       timeoutId = setTimeout(() => {
-        axios
-          .get(URL + `/search/${tld}/${query}`, CONFIG)
-          .then((response) => {
-            if (response.data.length === 0) {
-              setEmpty(true);
-              setSearchResult([]);
-            } else {
-              setEmpty(false);
-              setSearchResult(response.data);
-            }
-          })
-          .catch((error) => {
-            console.error("Search error:", error);
-            setEmpty(true);
-            setSearchResult([]);
-          })
-          .finally(() => {
-            setLoading(false);
-          });
+        fetch(`${URL}/search/${tld}/${query}`, CONFIG).then((response) => {
+          response
+            .json()
+            .then((data) => {
+              if (data.length === 0) {
+                setEmpty(true);
+                setSearchResult([]);
+              } else {
+                setEmpty(false);
+                setSearchResult(data);
+              }
+            })
+            .finally(() => {
+              setLoading(false);
+            });
+        });
       }, 300);
     } else {
       setSearchResult([]);
@@ -82,7 +78,10 @@ function SearchResults({ tld, query, darkmode }) {
       if (decoded !== domain) {
         return (
           <span>
-            {decoded} <span style={{ color: darkmode ? "#6c757d" : "#adb5bd" }}>({domain})</span>
+            {decoded}{" "}
+            <span style={{ color: darkmode ? "#6c757d" : "#adb5bd" }}>
+              ({domain})
+            </span>
           </span>
         );
       }
@@ -99,7 +98,7 @@ function SearchResults({ tld, query, darkmode }) {
   // Show message if query is too short
   if (query.length < 3) {
     return (
-      <h5 style={{ color: darkmode ? "black" : "white", textAlign: 'center' }}>
+      <h5 style={{ color: darkmode ? "black" : "white", textAlign: "center" }}>
         Please enter at least 3 characters
       </h5>
     );
@@ -108,11 +107,13 @@ function SearchResults({ tld, query, darkmode }) {
   return (
     <div>
       {loading ? (
-        <div className="centered-flex" style={{ minHeight: '100px' }}>
+        <div className="centered-flex" style={{ minHeight: "100px" }}>
           <Spinner animation="border" variant="primary" />
         </div>
       ) : empty ? (
-        <h5 style={{ color: darkmode ? "black" : "white", textAlign: 'center' }}>
+        <h5
+          style={{ color: darkmode ? "black" : "white", textAlign: "center" }}
+        >
           No results found
         </h5>
       ) : searchResult.length > 0 ? (
@@ -133,7 +134,7 @@ function SearchResults({ tld, query, darkmode }) {
           </Table>
         </div>
       ) : null}
-      
+
       <ScrollToTop isVisible={isVisible} onClick={scrollToTop} />
     </div>
   );

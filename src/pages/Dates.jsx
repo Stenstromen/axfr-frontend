@@ -3,16 +3,13 @@ import PropTypes from "prop-types";
 import { AiOutlineArrowUp } from "react-icons/ai";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
-import Breadcrumb from "react-bootstrap/Breadcrumb";
 import Col from "react-bootstrap/Col";
 import Spinner from "react-bootstrap/Spinner";
 import { Link } from "react-router-dom";
 import { MdOutlineDns } from "react-icons/md";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
-import axios from "axios";
 import { useDefaultProvider } from "../contexts/default";
-import { TbSquareArrowUpFilled } from "react-icons/tb";
 import PageHeader from "../components/PageHeader";
 import ScrollToTop from "../components/ScrollToTop";
 
@@ -66,37 +63,43 @@ function Dates(props) {
 
   useEffect(() => {
     setIsLoading(true);
-    axios
-      .get(URL + `/${props.tld}/0`, CONFIG)
-      .then((response) => {
-        if (response.data == null) {
-          setPagefull(true);
-        } else {
-          setDates(response.data);
-        }
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+
+    fetch(`${URL}/${props.tld}/0`, CONFIG).then((response) => {
+      response
+        .json()
+        .then((data) => {
+          if (data == null) {
+            setPagefull(true);
+          } else {
+            setDates(data);
+          }
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    });
   }, [props.tld]);
 
   useEffect(() => {
     if (page === 0) return;
 
     setIsLoading(true);
-    axios
-      .get(URL + `/${props.tld}/${page}`, CONFIG)
-      .then((response) => {
-        if (response.data == null) {
-          setPagefull(true);
-        } else {
-          setDates((prev) => [...prev, ...response.data]);
-        }
-      })
-      .finally(() => {
-        setIsLoading(false);
-        setLastLoadTime(Date.now());
-      });
+
+    fetch(`${URL}/${props.tld}/${page}`, CONFIG).then((response) => {
+      response
+        .json()
+        .then((data) => {
+          if (data == null) {
+            setPagefull(true);
+          } else {
+            setDates((prev) => [...prev, ...data]);
+          }
+        })
+        .finally(() => {
+          setIsLoading(false);
+          setLastLoadTime(Date.now());
+        });
+    });
   }, [props.tld, page]);
 
   useEffect(() => {
@@ -121,11 +124,11 @@ function Dates(props) {
         title={`New .${props.tld.toUpperCase()} Domains`}
         breadcrumbs={[
           { text: "Home", link: "/" },
-          { text: props.tld.toUpperCase(), active: true }
+          { text: props.tld.toUpperCase(), active: true },
         ]}
         darkmode={darkmode}
       />
-      
+
       <Container>
         <Row className="justify-content-md-center">
           <Col xl="8" sm>
@@ -156,7 +159,7 @@ function Dates(props) {
                 </tbody>
               </Table>
             </div>
-            
+
             <div className="page-controls">
               {pagefull ? (
                 <Button variant="success" onClick={scrollToTop}>
@@ -175,7 +178,7 @@ function Dates(props) {
                 </Button>
               )}
             </div>
-            
+
             <ScrollToTop isVisible={isVisible} onClick={scrollToTop} />
           </Col>
         </Row>

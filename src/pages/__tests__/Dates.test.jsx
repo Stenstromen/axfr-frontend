@@ -6,11 +6,8 @@ vi.mock('react-router-dom', async () => {
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
-import axios from "axios";
 import { DefaultProvider } from "../../contexts/default";
 import Dates from "../Dates";
-
-vi.mock("axios");
 
 vi.mock("../../components/PageHeader", () => ({
   default: () => <div data-testid="mock-page-header">Page Header</div>
@@ -101,15 +98,21 @@ describe("Dates Component", () => {
     window.scrollTo = mockScrollTo;
     Object.defineProperty(window, "scrollY", { value: 0, writable: true });
     
-    axios.get.mockImplementation((url) => {
+    global.fetch = vi.fn((url) => {
       if (url.includes('/nu/0')) {
-        return Promise.resolve({ data: mockDatesDataPage0 });
+        return Promise.resolve({
+          json: () => Promise.resolve(mockDatesDataPage0),
+        });
       }
       if (url.includes('/nu/1')) {
-        return Promise.resolve({ data: mockDatesDataPage1 });
+        return Promise.resolve({
+          json: () => Promise.resolve(mockDatesDataPage1),
+        });
       }
       if (url.includes('/nu/2')) {
-        return Promise.resolve({ data: null }); // This triggers pagefull = true
+        return Promise.resolve({
+          json: () => Promise.resolve(null), // This triggers pagefull = true
+        });
       }
       return Promise.reject(new Error('Invalid URL'));
     });

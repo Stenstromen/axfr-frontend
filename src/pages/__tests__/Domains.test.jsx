@@ -11,11 +11,8 @@ vi.mock("react-router-dom", async () => {
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
-import axios from "axios";
 import { DefaultProvider } from "../../contexts/default";
 import Domains from "../Domains";
-
-vi.mock("axios");
 
 vi.mock("../../components/PageHeader", () => ({
   default: () => <div data-testid="mock-page-header">Page Header</div>
@@ -106,15 +103,21 @@ describe("Domains Component", () => {
     window.scrollTo = mockScrollTo;
     Object.defineProperty(window, "scrollY", { value: 0, writable: true });
     
-    axios.get.mockImplementation((url) => {
+    global.fetch = vi.fn((url) => {
       if (url.includes("/nudomains/20241215/0")) {
-        return Promise.resolve({ data: mockDomainsDataPage0 });
+        return Promise.resolve({
+          json: () => Promise.resolve(mockDomainsDataPage0),
+        });
       }
       if (url.includes("/nudomains/20241215/1")) {
-        return Promise.resolve({ data: mockDomainsDataPage1 });
+        return Promise.resolve({
+          json: () => Promise.resolve(mockDomainsDataPage1),
+        });
       }
       if (url.includes("/nudomains/20241215/2")) {
-        return Promise.resolve({ data: null });
+        return Promise.resolve({
+          json: () => Promise.resolve(null),
+        });
       }
       return Promise.reject(new Error("Invalid URL"));
     });

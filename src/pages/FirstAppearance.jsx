@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
@@ -11,7 +10,6 @@ import Col from "react-bootstrap/Col";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import { useDefaultProvider } from "../contexts/default";
-import axios from "axios";
 
 const URL = import.meta.env.VITE_BACKEND_URL;
 const CONFIG = {
@@ -38,12 +36,14 @@ function FirstAppearance() {
     setResult(null);
 
     try {
-      const response = await axios.get(
+      const response = await fetch(
         `${URL}/${tld}appearance/${domain}.${tld}`,
-        CONFIG
-      );
-      setResult(response.data);
-      console.log(response.data);
+        CONFIG,
+      ).then((response) => {
+        response.json().then((data) => {
+          setResult(data);
+        });
+      });
     } catch (err) {
       setError("Domain not found or an error occurred");
     } finally {
@@ -103,7 +103,7 @@ function FirstAppearance() {
                 value={domain}
                 onChange={(e) => setDomain(e.target.value)}
                 onKeyPress={(e) => {
-                  if (e.key === 'Enter') {
+                  if (e.key === "Enter") {
                     handleSearch();
                   }
                 }}
@@ -118,14 +118,12 @@ function FirstAppearance() {
                 Searching...
               </div>
             )}
-            {error && (
-              <div style={{ color: "red" }}>
-                {error}
-              </div>
-            )}
+            {error && <div style={{ color: "red" }}>{error}</div>}
             {result && (
               <div style={{ color: darkmode ? "black" : "white" }}>
-                <h4>Results for {domain}.{tld}</h4>
+                <h4>
+                  Results for {domain}.{tld}
+                </h4>
                 <p>First appeared: {result.earliest_date}</p>
               </div>
             )}
@@ -136,4 +134,4 @@ function FirstAppearance() {
   );
 }
 
-export default FirstAppearance; 
+export default FirstAppearance;
