@@ -1,36 +1,23 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Container, Row, Col, Breadcrumb } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-function PageHeader({ title, breadcrumbs, darkmode }) {
+function PageHeader({ title, breadcrumbs }) {
   return (
-    <Container>
-      <Row className="justify-content-md-center">
-        <Col xl="8" sm>
-          <div className="text-center my-4">
-            <h2 style={{ color: darkmode ? "black" : "white" }}>
-              {title}
-            </h2>
-          </div>
-          <Breadcrumb>
-            {breadcrumbs.map((crumb, index) => (
-              <Breadcrumb.Item
-                key={index}
-                active={crumb.active}
-                style={crumb.active ? { color: darkmode ? "black" : "white" } : {}}
-              >
-                {crumb.link ? (
-                  <Link to={crumb.link}>{crumb.text}</Link>
-                ) : (
-                  crumb.text
-                )}
-              </Breadcrumb.Item>
-            ))}
-          </Breadcrumb>
-        </Col>
-      </Row>
-    </Container>
+    <header className="page-header">
+      <ol className="page-crumbs">
+        {breadcrumbs.map((crumb, index) => (
+          <li key={index}>
+            {crumb.link && !crumb.active ? (
+              <Link to={crumb.link}>{crumb.text}</Link>
+            ) : (
+              crumb.text
+            )}
+          </li>
+        ))}
+      </ol>
+      <h1 className="page-title">{title}</h1>
+    </header>
   );
 }
 
@@ -40,10 +27,9 @@ PageHeader.propTypes = {
     PropTypes.shape({
       text: PropTypes.string.isRequired,
       link: PropTypes.string,
-      active: PropTypes.bool
+      active: PropTypes.bool,
     })
   ).isRequired,
-  darkmode: PropTypes.bool.isRequired
 };
 
-export default PageHeader; 
+export default PageHeader;

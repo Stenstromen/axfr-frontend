@@ -1,23 +1,32 @@
-import React, { useEffect, lazy } from "react";
+import React, { useEffect, lazy, Suspense } from "react";
 import { useDefaultProvider } from "./contexts/default";
-import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import "./App.css";
-import "bootstrap/dist/css/bootstrap.min.css";
 import NavBar from "./components/NavBar";
 import setBodyColor from "./setBodyColor";
 
-const Home = lazy(() => import('./pages/Home'));
-const Stats = lazy(() => import('./pages/Stats'));
-const Search = lazy(() => import('./pages/Search'));
-const Dates = lazy(() => import('./pages/Dates'));
-const Domains = lazy(() => import('./pages/Domains'));
-const FirstAppearance = lazy(() => import('./pages/FirstAppearance'));
+const Home = lazy(() => import("./pages/Home"));
+const Stats = lazy(() => import("./pages/Stats"));
+const Search = lazy(() => import("./pages/Search"));
+const Dates = lazy(() => import("./pages/Dates"));
+const Domains = lazy(() => import("./pages/Domains"));
+const FirstAppearance = lazy(() => import("./pages/FirstAppearance"));
 
 function Root() {
   return (
     <>
       <NavBar />
-      <Outlet />
+      <main className="app-main">
+        <Suspense
+          fallback={
+            <div className="centered-flex" style={{ minHeight: 240 }}>
+              <div className="spinner-border" role="status" aria-label="Loading" />
+            </div>
+          }
+        >
+          <Outlet />
+        </Suspense>
+      </main>
     </>
   );
 }
@@ -64,27 +73,17 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  const { setIsMobile, darkmode, setDarkmode } = useDefaultProvider();
+  const { setIsMobile, darkmode } = useDefaultProvider();
 
-  darkmode
-    ? setBodyColor({ color: "lightblack" })
-    : setBodyColor({ color: "#252525" });
+  setBodyColor({ theme: darkmode ? "light" : "dark" });
 
   function handleResize() {
-    window.innerWidth < 425 ? setIsMobile(true) : setIsMobile(false);
+    window.innerWidth < 768 ? setIsMobile(true) : setIsMobile(false);
   }
 
   useEffect(() => {
     window.addEventListener("resize", handleResize);
-  }, []);
-
-  useEffect(() => {
-    if (
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-    ) {
-      setDarkmode(!darkmode);
-    }
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   handleResize();

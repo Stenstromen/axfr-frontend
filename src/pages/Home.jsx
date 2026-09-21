@@ -1,91 +1,107 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import { Link } from "react-router-dom";
-import Button from "react-bootstrap/Button";
-import Card from "react-bootstrap/Card";
-import PageHeader from "../components/PageHeader";
-import { useDefaultProvider } from "../contexts/default";
+import {
+  HiOutlineMagnifyingGlass,
+  HiOutlineChartBar,
+  HiOutlineSparkles,
+  HiOutlineGlobeAlt,
+} from "react-icons/hi2";
+import { MdOutlineDns } from "react-icons/md";
 
 function Home({ tlds }) {
-  const { darkmode } = useDefaultProvider();
-
   const cards = [
     {
       title: "Domain Search",
-      text: (
-        <>
-          Search&nbsp;
-          {tlds.map((item) => (
-            <React.Fragment key={item}>
-              .{item.toUpperCase()}&nbsp;
-            </React.Fragment>
-          ))}
-          Domains
-        </>
-      ),
+      text: "Look up newly seen names across Nordic and nearby ccTLDs.",
       link: "/search",
       buttonText: "Search Domains",
-    },
-    {
-      title: "Domain First Appearance",
-      text: ".SE/.NU Domains that have appeared for the first time (in my records)",
-      link: "/first-appearance",
-      buttonText: "View First Appearance",
+      icon: HiOutlineMagnifyingGlass,
+      variant: "featured",
+      chips: tlds,
     },
     {
       title: "Domain Stats",
-      text: "Domain stats for .SE, .NU, .CH, .LI, .EE, .SK",
+      text: "Registration volume over time for .SE, .NU, .CH, .LI, .EE and .SK.",
       link: "/stats",
       buttonText: "View Domain Stats",
+      icon: HiOutlineChartBar,
     },
     {
-      title: "Fresh .SE Domains",
-      text: "Newly Added And Updated .SE Domains, Added Yesterday",
+      title: "First Appearance",
+      text: ".SE and .NU names that showed up for the first time in these records.",
+      link: "/first-appearance",
+      buttonText: "View First Appearance",
+      icon: HiOutlineSparkles,
+    },
+    {
+      title: "Fresh .SE",
+      text: "Newly added and updated .SE domains from yesterday.",
       link: "/se",
       buttonText: "View .SE Domains",
+      icon: MdOutlineDns,
     },
     {
-      title: "Fresh .NU Domains",
-      text: "Newly Added And Updated .NU Domains, Added Yesterday",
+      title: "Fresh .NU",
+      text: "Newly added and updated .NU domains from yesterday.",
       link: "/nu",
       buttonText: "View .NU Domains",
+      icon: HiOutlineGlobeAlt,
     },
   ];
 
   return (
     <div>
-      <Container>
-        <Row className="justify-content-md-center">
-          <Col xl="8" sm>
-            <PageHeader
-              title={`New .SE/.NU Domains`}
-              breadcrumbs={[{ text: "Home", link: "/" }]}
-              darkmode={darkmode}
-            />
-          </Col>
-        </Row>
-        <div className="card-grid">
-          {cards.map((card, index) => (
-            <Card
-              key={index}
-              bg={darkmode ? "light" : "dark"}
-              text={darkmode ? "dark" : "light"}
-              className="card-item"
-            >
-              <Card.Body>
-                <Card.Title>📝 {card.title}</Card.Title>
-                <Card.Text>{card.text}</Card.Text>
-                <Link to={card.link}>
-                  <Button variant="primary">{card.buttonText}</Button>
-                </Link>
-              </Card.Body>
-            </Card>
-          ))}
+      <section className="hero">
+        <p className="hero-kicker">DNS zone observations</p>
+        <h1>
+          New <span className="grad">.SE / .NU</span>
+          <br />
+          domains, daily
+        </h1>
+        <p className="hero-sub">
+          A live watch on freshly registered and updated names — search the
+          archive, chart the trend, or browse yesterday&apos;s drop.
+        </p>
+        <div className="hero-actions">
+          <Link to="/search" className="btn-glow">
+            Search domains
+          </Link>
+          <Link to="/se" className="btn-ghost">
+            Browse .SE
+          </Link>
         </div>
-      </Container>
+      </section>
+
+      <div className="feature-grid">
+        {cards.map((card) => {
+          const Icon = card.icon;
+          return (
+            <article
+              key={card.link}
+              className={`feature-card${card.variant === "featured" ? " featured" : ""}`}
+            >
+              <div className="feature-icon">
+                <Icon size={22} />
+              </div>
+              <h3>{card.title}</h3>
+              <p>{card.text}</p>
+              {card.chips && (
+                <div className="tld-chip-row">
+                  {card.chips.map((item) => (
+                    <span key={item} className="tld-chip">
+                      .{item.toUpperCase()}
+                    </span>
+                  ))}
+                </div>
+              )}
+              <Link to={card.link} className="btn btn-primary">
+                {card.buttonText}
+              </Link>
+            </article>
+          );
+        })}
+      </div>
     </div>
   );
 }

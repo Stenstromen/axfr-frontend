@@ -6,17 +6,14 @@ import {
   XAxis,
   YAxis,
   Tooltip,
+  ResponsiveContainer,
 } from "recharts";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
-import Breadcrumb from "react-bootstrap/Breadcrumb";
 import Spinner from "react-bootstrap/Spinner";
-import { Link } from "react-router-dom";
 import { useDefaultProvider } from "../contexts/default";
 import { AiOutlineArrowUp, AiOutlineArrowDown } from "react-icons/ai";
+import PageHeader from "../components/PageHeader";
 
 function formatDate(tickItem, period) {
   const date = new Date(tickItem);
@@ -66,6 +63,16 @@ function Stats() {
   const [comparisonPeriod, setComparisonPeriod] = useState(
     COMPARISON_PERIODS.ALL_TIME,
   );
+
+  const isLight = darkmode;
+  const chartStroke = isLight ? "#3b6ef5" : "#6ea0ff";
+  const axisColor = isLight ? "#5b677c" : "#8b96ab";
+  const tooltipStyles = {
+    backgroundColor: isLight ? "#ffffff" : "#121826",
+    border: isLight ? "1px solid rgba(15,23,42,0.08)" : "1px solid rgba(148,163,184,0.12)",
+    borderRadius: 12,
+    color: isLight ? "#0f172a" : "#eef2f7",
+  };
 
   useEffect(() => {
     setTld("se");
@@ -131,182 +138,157 @@ function Stats() {
     return stats.slice(startIndex);
   };
 
+  const trend = getTrend();
+
   return (
     <div>
-      <Container>
-        <Row className="justify-content-md-center">
-          <Col xl="8" sm>
-            <div
+      <PageHeader
+        title="Domain Stats"
+        breadcrumbs={[
+          { text: "Home", link: "/" },
+          { text: "Domain Stats", active: true },
+        ]}
+      />
+
+      <div className="tld-pills">
+        <ButtonGroup>
+          {tlds.map((item) => (
+            <ToggleButton
+              key={item}
+              variant="primary"
+              onClick={() => setTld(item)}
+              checked={tld === item}
+              type="radio"
+              name="stats-tld"
+              value={item}
+              id={`stats-tld-${item}`}
               style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                flexDirection: "column",
+                flex: isMobile ? "1 0 30%" : "1",
+                fontSize: isMobile ? "0.9rem" : "1rem",
               }}
             >
-              <h2
-                style={{
-                  color: darkmode ? "black" : "white",
-                  fontSize: isMobile ? "1.5rem" : "2rem",
-                  textAlign: "center",
-                  marginBottom: "1rem",
-                }}
-              >
-                Domain Stats
-              </h2>
-            </div>
-            <Breadcrumb>
-              <Breadcrumb.Item>
-                <Link to={"/"}>Home</Link>
-              </Breadcrumb.Item>
-              <Breadcrumb.Item active>Domain Stats</Breadcrumb.Item>
-            </Breadcrumb>
-            <ButtonGroup
+              .{item.toUpperCase()}
+            </ToggleButton>
+          ))}
+        </ButtonGroup>
+      </div>
+
+      <div className="tld-pills">
+        <ButtonGroup>
+          {Object.values(COMPARISON_PERIODS).map((period) => (
+            <ToggleButton
+              key={period.label}
+              variant="outline-primary"
+              onClick={() => setComparisonPeriod(period)}
+              checked={comparisonPeriod.days === period.days}
+              disabled={!isComparisonPeriodAvailable(period.days)}
+              type="radio"
+              name="stats-period"
+              value={period.label}
+              id={`stats-period-${period.label}`}
               style={{
-                width: "100%",
-                paddingBottom: "10px",
-                display: "flex",
-                flexWrap: isMobile ? "wrap" : "nowrap",
-                gap: isMobile ? "5px" : "0",
+                flex: isMobile ? "1 0 45%" : "1",
+                fontSize: isMobile ? "0.9rem" : "1rem",
               }}
             >
-              {tlds.map((item) => (
-                <ToggleButton
-                  key={item}
-                  variant="primary"
-                  onClick={() => setTld(item)}
-                  checked={tld === item}
-                  type="radio"
-                  style={{
-                    flex: isMobile ? "1 0 30%" : "1",
-                    fontSize: isMobile ? "0.9rem" : "1rem",
-                  }}
-                >
-                  .{item.toUpperCase()}
-                </ToggleButton>
-              ))}
-            </ButtonGroup>
-            <ButtonGroup
-              style={{
-                width: "100%",
-                paddingBottom: "10px",
-                marginTop: "10px",
-                display: "flex",
-                flexWrap: isMobile ? "wrap" : "nowrap",
-                gap: isMobile ? "5px" : "0",
-              }}
-            >
-              {Object.values(COMPARISON_PERIODS).map((period) => (
-                <ToggleButton
-                  key={period.label}
-                  variant="outline-primary"
-                  onClick={() => setComparisonPeriod(period)}
-                  checked={comparisonPeriod.days === period.days}
-                  disabled={!isComparisonPeriodAvailable(period.days)}
-                  type="radio"
-                  style={{
-                    flex: isMobile ? "1 0 45%" : "1",
-                    fontSize: isMobile ? "0.9rem" : "1rem",
-                  }}
-                >
-                  {period.label}
-                </ToggleButton>
-              ))}
-            </ButtonGroup>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                flexDirection: "column",
-                padding: isMobile ? "10px 0" : "20px 0",
-              }}
-            >
-              {loading ? (
-                <h1>
-                  <Spinner animation="border" variant="primary" />
-                </h1>
-              ) : (
-                <p
-                  style={{
-                    color: darkmode ? "black" : "white",
-                    fontSize: isMobile ? "0.9rem" : "1rem",
-                    textAlign: "center",
-                    margin: isMobile ? "0.5rem 0" : "1rem 0",
-                    wordBreak: "break-word",
-                  }}
-                >
-                  Epoch {stats[0]?.date} - Last Metric{" "}
-                  {stats.length > 0 && (
-                    <>
-                      {new Intl.NumberFormat("fr-FR").format(
-                        stats[stats.length - 1].amount,
-                      )}
-                      {getTrend() && (
-                        <span
-                          style={{
-                            color: getTrend().direction ? "#198754" : "#dc3545",
-                            marginLeft: "10px",
-                            display: isMobile ? "block" : "inline",
-                            marginTop: isMobile ? "5px" : "0",
-                          }}
-                        >
-                          {getTrend().direction ? (
-                            <AiOutlineArrowUp />
-                          ) : (
-                            <AiOutlineArrowDown />
-                          )}{" "}
-                          {new Intl.NumberFormat("fr-FR").format(
-                            getTrend().difference,
-                          )}{" "}
-                          ({getTrend().percentage}%) vs {getTrend().comparedTo}
-                        </span>
-                      )}
-                    </>
+              {period.label}
+            </ToggleButton>
+          ))}
+        </ButtonGroup>
+      </div>
+
+      <div className="glass-panel">
+        <div className="centered-flex" style={{ minHeight: 52 }}>
+          {loading ? (
+            <Spinner animation="border" variant="primary" />
+          ) : (
+            <p className="stats-meta">
+              Epoch {stats[0]?.date} — Last metric{" "}
+              {stats.length > 0 && (
+                <>
+                  {new Intl.NumberFormat("fr-FR").format(
+                    stats[stats.length - 1].amount,
                   )}
-                </p>
+                  {trend && (
+                    <span
+                      className={trend.direction ? "trend-up" : "trend-down"}
+                      style={{
+                        marginLeft: "10px",
+                        display: isMobile ? "block" : "inline",
+                        marginTop: isMobile ? "5px" : "0",
+                      }}
+                    >
+                      {trend.direction ? (
+                        <AiOutlineArrowUp />
+                      ) : (
+                        <AiOutlineArrowDown />
+                      )}{" "}
+                      {new Intl.NumberFormat("fr-FR").format(trend.difference)} (
+                      {trend.percentage}%) vs {trend.comparedTo}
+                    </span>
+                  )}
+                </>
               )}
-            </div>
+            </p>
+          )}
+        </div>
+
+        <div className="chart-wrap">
+          <ResponsiveContainer width="100%" height="100%">
             <AreaChart
-              width={isMobile ? window.innerWidth - 15 : 880}
-              height={isMobile ? 250 : 300}
               data={getFilteredStats()}
               margin={{
-                top: 5,
-                right: isMobile ? 10 : 20,
+                top: 8,
+                right: isMobile ? 8 : 16,
                 bottom: 20,
-                left: isMobile ? 20 : 30,
+                left: isMobile ? 0 : 8,
               }}
             >
               <defs>
                 <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="50%" stopColor="#8884d8" stopOpacity={0.8} />
-                  <stop offset="99%" stopColor="#8884d8" stopOpacity={0} />
+                  <stop offset="0%" stopColor={chartStroke} stopOpacity={0.45} />
+                  <stop offset="100%" stopColor={chartStroke} stopOpacity={0} />
                 </linearGradient>
               </defs>
               <Area
                 type="monotone"
                 dataKey="amount"
-                stroke="#8884d8"
+                stroke={chartStroke}
+                strokeWidth={2.2}
                 fillOpacity={1}
                 fill="url(#colorAmount)"
                 connectNulls={true}
               />
-              <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+              <CartesianGrid stroke="var(--chart-grid)" strokeDasharray="4 8" />
               <XAxis
                 dataKey="date"
+                tick={{ fill: axisColor, fontSize: 12 }}
+                axisLine={{ stroke: "var(--border)" }}
+                tickLine={false}
                 tickFormatter={(value) => formatDate(value, comparisonPeriod)}
                 interval={comparisonPeriod.days === 2 ? 0 : "preserveStartEnd"}
                 angle={-45}
                 textAnchor="end"
                 height={60}
               />
-              <YAxis tickFormatter={formatLargeNumber} />
-              <Tooltip />
+              <YAxis
+                tick={{ fill: axisColor, fontSize: 12 }}
+                axisLine={false}
+                tickLine={false}
+                tickFormatter={formatLargeNumber}
+              />
+              <Tooltip
+                contentStyle={tooltipStyles}
+                labelFormatter={(value) => formatDate(value, comparisonPeriod)}
+                formatter={(value) => [
+                  new Intl.NumberFormat("fr-FR").format(value),
+                  "Domains",
+                ]}
+              />
             </AreaChart>
-          </Col>
-        </Row>
-      </Container>
+          </ResponsiveContainer>
+        </div>
+      </div>
     </div>
   );
 }
