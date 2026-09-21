@@ -4,11 +4,7 @@ import { useParams } from "react-router-dom";
 import { AiOutlineArrowUp } from "react-icons/ai";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import Spinner from "react-bootstrap/Spinner";
-import { useDefaultProvider } from "../contexts/default";
 import punycode from "punycode";
 import PageHeader from "../components/PageHeader";
 import ScrollToTop from "../components/ScrollToTop";
@@ -20,16 +16,13 @@ const CONFIG = {
   },
 };
 
-const formatDomain = (domain, darkmode) => {
+const formatDomain = (domain) => {
   try {
     const decoded = punycode.toUnicode(domain);
     if (decoded !== domain) {
       return (
         <span>
-          {decoded}{" "}
-          <span style={{ color: darkmode ? "#6c757d" : "#adb5bd" }}>
-            ({domain})
-          </span>
+          {decoded} <span className="puny-alt">({domain})</span>
         </span>
       );
     }
@@ -45,7 +38,6 @@ function Domains(props) {
   const [page, setPage] = useState(0);
   const [pagefull, setPagefull] = useState(false);
   const [domains, setDomains] = useState([]);
-  const { darkmode } = useDefaultProvider();
   const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [lastLoadTime, setLastLoadTime] = useState(0);
@@ -64,7 +56,6 @@ function Domains(props) {
   const bottom = useCallback(() => {
     if (isLoading || pagefull) return;
 
-    // Prevent immediate triggering after data load
     const now = Date.now();
     if (now - lastLoadTime < 100) return;
 
@@ -117,23 +108,21 @@ function Domains(props) {
 
     setIsLoading(true);
 
-    fetch(`${URL}/${getUrlPath()}/${param}/${page}`, CONFIG).then(
-      (response) => {
-        response
-          .json()
-          .then((data) => {
-            if (data == null) {
-              setPagefull(true);
-            } else {
-              setDomains((prev) => [...prev, ...data]);
-            }
-          })
-          .finally(() => {
-            setIsLoading(false);
-            setLastLoadTime(Date.now());
-          });
-      },
-    );
+    fetch(`${URL}/${getUrlPath()}/${param}/${page}`, CONFIG).then((response) => {
+      response
+        .json()
+        .then((data) => {
+          if (data == null) {
+            setPagefull(true);
+          } else {
+            setDomains((prev) => [...prev, ...data]);
+          }
+        })
+        .finally(() => {
+          setIsLoading(false);
+          setLastLoadTime(Date.now());
+        });
+    });
   }, [props.tld, page, param]);
 
   useEffect(() => {
@@ -161,52 +150,45 @@ function Domains(props) {
           { text: props.tld.toUpperCase(), link: `/${props.tld}` },
           { text: param, active: true },
         ]}
-        darkmode={darkmode}
       />
 
-      <Container>
-        <Row className="justify-content-md-center">
-          <Col xl="8" sm>
-            <div className="table-container">
-              <Table striped bordered variant={darkmode ? "light" : "dark"}>
-                <thead>
-                  <tr>
-                    <th>Domain Name</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {domains.map((item) => (
-                    <tr key={item.domain}>
-                      <td>{formatDomain(item.domain, darkmode)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-            </div>
+      <div className="table-container">
+        <Table className="axfr-table" hover>
+          <thead>
+            <tr>
+              <th>Domain Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            {domains.map((item) => (
+              <tr key={item.domain}>
+                <td>{formatDomain(item.domain)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
 
-            <div className="page-controls">
-              {pagefull ? (
-                <Button variant="success" onClick={scrollToTop}>
-                  Back to top <AiOutlineArrowUp />
-                </Button>
-              ) : (
-                <Button onClick={() => bottom()} variant="primary" size="sm">
-                  <Spinner
-                    as="span"
-                    animation="grow"
-                    size="sm"
-                    role="status"
-                    aria-hidden="true"
-                  />
-                  Next Page
-                </Button>
-              )}
-            </div>
+      <div className="page-controls">
+        {pagefull ? (
+          <Button variant="success" onClick={scrollToTop}>
+            Back to top <AiOutlineArrowUp />
+          </Button>
+        ) : (
+          <Button onClick={() => bottom()} variant="primary" size="sm">
+            <Spinner
+              as="span"
+              animation="grow"
+              size="sm"
+              role="status"
+              aria-hidden="true"
+            />
+            Next Page
+          </Button>
+        )}
+      </div>
 
-            <ScrollToTop isVisible={isVisible} onClick={scrollToTop} />
-          </Col>
-        </Row>
-      </Container>
+      <ScrollToTop isVisible={isVisible} onClick={scrollToTop} />
     </div>
   );
 }

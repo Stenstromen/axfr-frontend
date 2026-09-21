@@ -1,19 +1,22 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Nav } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 function DesktopNavbar({ locations }) {
   return (
-    <>
-      <Nav className="me-auto">
-        {locations.map((location, index) => (
-          <Nav.Link key={index} as={Link} to={location.path}>
-            {location.name}
-          </Nav.Link>
-        ))}
-      </Nav>
-    </>
+    <nav className="axfr-links">
+      {locations.map((location) => (
+        <NavLink
+          key={location.path}
+          to={location.path}
+          className={({ isActive }) =>
+            `axfr-nav-link${isActive ? " is-active" : ""}`
+          }
+        >
+          {location.name}
+        </NavLink>
+      ))}
+    </nav>
   );
 }
 

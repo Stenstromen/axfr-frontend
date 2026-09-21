@@ -12,7 +12,7 @@ const CONFIG = {
   },
 };
 
-function SearchResults({ tld, query, darkmode }) {
+function SearchResults({ tld, query }) {
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
   const [empty, setEmpty] = useState(false);
@@ -78,10 +78,7 @@ function SearchResults({ tld, query, darkmode }) {
       if (decoded !== domain) {
         return (
           <span>
-            {decoded}{" "}
-            <span style={{ color: darkmode ? "#6c757d" : "#adb5bd" }}>
-              ({domain})
-            </span>
+            {decoded} <span className="puny-alt">({domain})</span>
           </span>
         );
       }
@@ -92,16 +89,10 @@ function SearchResults({ tld, query, darkmode }) {
     }
   };
 
-  // Don't show anything if there's no query
   if (!query) return null;
 
-  // Show message if query is too short
   if (query.length < 3) {
-    return (
-      <h5 style={{ color: darkmode ? "black" : "white", textAlign: "center" }}>
-        Please enter at least 3 characters
-      </h5>
-    );
+    return <p className="status-copy">Please enter at least 3 characters</p>;
   }
 
   return (
@@ -111,14 +102,10 @@ function SearchResults({ tld, query, darkmode }) {
           <Spinner animation="border" variant="primary" />
         </div>
       ) : empty ? (
-        <h5
-          style={{ color: darkmode ? "black" : "white", textAlign: "center" }}
-        >
-          No results found
-        </h5>
+        <p className="status-copy">No results found</p>
       ) : searchResult.length > 0 ? (
         <div className="table-container">
-          <Table striped bordered variant={darkmode ? "light" : "dark"}>
+          <Table className="axfr-table" hover>
             <thead>
               <tr>
                 <th>Domain ({searchResult.length} found)</th>
@@ -143,7 +130,6 @@ function SearchResults({ tld, query, darkmode }) {
 SearchResults.propTypes = {
   tld: PropTypes.string.isRequired,
   query: PropTypes.string.isRequired,
-  darkmode: PropTypes.bool.isRequired,
 };
 
 export default SearchResults;

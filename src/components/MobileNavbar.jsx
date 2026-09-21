@@ -3,32 +3,20 @@ import PropTypes from "prop-types";
 import { Nav, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-function MobileNavbar({ darkmode, locations }) {
+function MobileNavbar({ locations }) {
   return (
     <Nav className="me-auto">
       <NavDropdown
-        title={
-          <span style={{ color: "white" }}>
-            Menu
-          </span>
-        }
+        title="Menu"
         id="basic-nav-dropdown"
-        menuVariant={darkmode ? "light" : "dark"}
-        style={{
-          backgroundColor: darkmode ? "#0d6efd" : "#212529",
-          padding: "8px 0",
-        }}
+        className="mobile-menu-toggle"
       >
-        {locations.map((location, index) => (
-          <NavDropdown.Item 
-            key={index}
+        {locations.map((location) => (
+          <NavDropdown.Item
+            key={location.path}
             as={Link}
             to={location.path}
-            style={{
-              backgroundColor: darkmode ? "white" : "#212529",
-              color: darkmode ? "black" : "white",
-              padding: "8px 0",
-            }}
+            className="axfr-dropdown-item"
           >
             {location.name}
           </NavDropdown.Item>
@@ -39,7 +27,6 @@ function MobileNavbar({ darkmode, locations }) {
 }
 
 MobileNavbar.propTypes = {
-  darkmode: PropTypes.bool,
   locations: PropTypes.array,
 };
 
